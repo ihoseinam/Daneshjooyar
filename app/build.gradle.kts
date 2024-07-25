@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -75,5 +77,27 @@ dependencies {
     
     //glide
     implementation(libs.glide.compose)
+
+    //system ui controller
+    implementation(libs.accompanist.systemuicontroller)
+
+    //lottie
+    implementation(libs.lottie.compose)
+
+    //dagger hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
+
+    //icon
+    implementation(libs.androidx.material.icons.extended)
+
+    //data store
+    implementation(libs.androidx.datastore.preferences)
 
 }
