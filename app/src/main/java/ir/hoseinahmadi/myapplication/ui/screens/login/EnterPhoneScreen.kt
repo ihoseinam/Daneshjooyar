@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import ir.hoseinahmadi.myapplication.R
+import ir.hoseinahmadi.myapplication.navigatin.Screen
 import ir.hoseinahmadi.myapplication.ui.component.TextAndUnderLine
 import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
@@ -61,7 +62,7 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
             .padding(horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(50.dp))
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "",
@@ -70,19 +71,21 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
         Spacer(modifier = Modifier.height(60.dp))
         Text(
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(vertical = 8.dp, horizontal = 5.dp)
                 .align(Alignment.Start),
             text = "ورود یا ثبت نام",
             style = MaterialTheme.typography.bodyLarge,
             color = Color.Black
         )
         Text(
-            modifier = Modifier.align(Alignment.Start),
+            modifier = Modifier
+                .padding(horizontal = 5.dp)
+                .align(Alignment.Start),
             text = "لطفا شماره موبایل خود را وارد کنید.",
             style = MaterialTheme.typography.bodyMedium,
             color = Color.DarkGray
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         OutlinedTextField(
             trailingIcon = {
@@ -103,7 +106,7 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             shape = RoundedCornerShape(11.dp),
             isError = isError,
-            textStyle = MaterialTheme.typography.bodyMedium,
+            textStyle = MaterialTheme.typography.bodyLarge,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
                 unfocusedContainerColor = Color.White,
@@ -148,7 +151,7 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
             )
         )
         Button(
-            enabled = phone.isNotEmpty(),
+            enabled = phone.isNotEmpty()|| !isError,
             colors = ButtonDefaults.buttonColors(
                 Color.Transparent,
             ),
@@ -166,7 +169,7 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
                     isError = true
                 } else {
                     isError = false
-
+                    navHostController.navigate(Screen.VerifyPhone.route + "?phone=$phone")
                 }
             }) {
             Text(
@@ -176,7 +179,7 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
                 color = Color.White
             )
         }
-        TextButton(onClick = {  }) {
+        TextButton(onClick = { }) {
             TextAndUnderLine(
                 fullText = "شرایط و قوانین لرن آکادمی را مطالعه کرده\u200Cام و می\u200Cپذیرم.",
                 underlinedText = listOf(

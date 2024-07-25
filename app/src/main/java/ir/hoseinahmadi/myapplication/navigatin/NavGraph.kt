@@ -27,7 +27,7 @@ fun NavGraph(navHostController: NavHostController) {
             EnterPhoneScreen(navHostController = navHostController)
         }
         composable(
-            route = Screen.VerifyPhone.route + "?phone{phone}",
+            route = Screen.VerifyPhone.route + "?phone={phone}",
             arguments = listOf(
                 navArgument("phone") {
                     type = NavType.StringType
