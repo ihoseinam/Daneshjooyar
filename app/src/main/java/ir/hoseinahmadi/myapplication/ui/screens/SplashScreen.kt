@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.navigatin.Screen
+import ir.hoseinahmadi.myapplication.utils.Constants
 import kotlinx.coroutines.delay
 
 @Composable
@@ -63,10 +64,19 @@ fun SplashScreen(navHostController: NavHostController) {
     }
     LaunchedEffect(key1 = true) {
         delay(2000)
-        navHostController.navigate(Screen.EnterPhone.route) {
-            popUpTo(Screen.Splash.route) {
-                inclusive = true
+        if (Constants.CHECK_LOGIN){
+            navHostController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Splash.route) {
+                    inclusive = true
+                }
+            }
+        }else{
+            navHostController.navigate(Screen.EnterPhone.route) {
+                popUpTo(Screen.Splash.route) {
+                    inclusive = true
+                }
             }
         }
+
     }
 }

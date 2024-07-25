@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ir.hoseinahmadi.myapplication.navigatin.NavGraph
+import ir.hoseinahmadi.myapplication.ui.component.AppConfig
 import ir.hoseinahmadi.myapplication.ui.theme.DaneshjooyarTheme
 import ir.hoseinahmadi.myapplication.viewModel.DatStoreViewModel
 import kotlinx.coroutines.runBlocking
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            AppConfig()
             navHostController = rememberNavController()
             DaneshjooyarTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {

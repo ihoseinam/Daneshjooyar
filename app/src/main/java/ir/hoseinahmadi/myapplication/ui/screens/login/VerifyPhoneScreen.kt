@@ -52,16 +52,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ir.hoseinahmadi.myapplication.R
+import ir.hoseinahmadi.myapplication.navigatin.Screen
 import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
+import ir.hoseinahmadi.myapplication.utils.Constants
 import ir.hoseinahmadi.myapplication.utils.Helper
+import ir.hoseinahmadi.myapplication.viewModel.DatStoreViewModel
 
 @Composable
 fun VerifyPhoneScreen(
     navHostController: NavHostController,
-    phone: String
+    phone: String,
+    datStoreViewModel: DatStoreViewModel = hiltViewModel()
 ) {
     Text(
         text = Helper.byLocate(phone),
@@ -150,9 +155,10 @@ fun VerifyPhoneScreen(
         }
         if (isError) {
             Text(
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp)
+                modifier = Modifier
+                    .padding(horizontal = 14.dp, vertical = 4.dp)
                     .align(Alignment.Start),
-                text = "شماره موبایل نامعتبر است.",
+                text = "کد تایید وارد شده نامعتبر است.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color(0xffED2E2E)
             )
@@ -185,11 +191,13 @@ fun VerifyPhoneScreen(
                     backGround
                 ),
             onClick = {
-                Log.e("12",code)
                 if (Helper.byLocate(code) != Helper.byLocate("12345")) {
                     isError = true
                 } else {
                     isError = false
+                    navHostController.navigate(Screen.Home.route)
+                    Constants.CHECK_LOGIN = true
+                    datStoreViewModel.saveIsLogin(true)
                 }
             }) {
             Text(

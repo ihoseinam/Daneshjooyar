@@ -21,8 +21,19 @@ class DatStoreViewModel @Inject constructor(
         const val USER_NAME_KEY = "USER_NAME_KEY"
         const val USER_PASSWORD_KEY = "USER_PASSWORD_KEY"
         const val USER_EMAIL_KEY = "USER_EMAIL_KEY"
+        const val CHECK_LOGIN ="CHECK_LOGIN_KEY"
     }
 
+
+    fun saveIsLogin(value: Boolean) {
+        viewModelScope.launch {
+            repository.putBoolean(CHECK_LOGIN, value)
+        }
+    }
+
+    fun getIsLogin(): Boolean? = runBlocking {
+        repository.getBoolean(CHECK_LOGIN)
+    }
 
     fun saveUserToken(value: String) {
         viewModelScope.launch {
