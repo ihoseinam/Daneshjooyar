@@ -6,6 +6,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import ir.hoseinahmadi.myapplication.ui.screens.AboutScreen
+import ir.hoseinahmadi.myapplication.ui.screens.DocumentsScreen
 import ir.hoseinahmadi.myapplication.ui.screens.HomeScreen
 import ir.hoseinahmadi.myapplication.ui.screens.SplashScreen
 import ir.hoseinahmadi.myapplication.ui.screens.login.EnterPhoneScreen
@@ -36,8 +38,16 @@ fun NavGraph(navHostController: NavHostController) {
         ) {
             VerifyPhoneScreen(
                 navHostController = navHostController,
-                phone =it.arguments?.getString("phone") ?:"null"
+                phone = it.arguments?.getString("phone") ?: "null"
             )
         }
+
+        composable(route = Screen.Documents.route) {
+            DocumentsScreen(navHostController)
+        }
+         composable(route = Screen.About.route) {
+             AboutScreen(navHostController)
+        }
+
     }
 }
