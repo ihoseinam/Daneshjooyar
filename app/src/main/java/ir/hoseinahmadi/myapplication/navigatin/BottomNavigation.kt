@@ -1,5 +1,6 @@
 package ir.hoseinahmadi.myapplication.navigatin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +33,8 @@ fun BottomNavigation(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .background(Color.White),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
@@ -73,6 +75,7 @@ fun NavHostController.navigateSingleTopTo(route: String) =
             this@navigateSingleTopTo.graph.findStartDestination().id
         ) {
             saveState = true
+            inclusive =true
         }
         launchSingleTop = true
         restoreState = true

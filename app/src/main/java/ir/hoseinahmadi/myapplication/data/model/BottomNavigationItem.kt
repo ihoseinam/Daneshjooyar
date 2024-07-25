@@ -6,6 +6,6 @@ import androidx.compose.ui.graphics.painter.Painter
 data class BottomNavigationItem(
     val route:String,
     val name:String,
-    @DrawableRes val selectedIcon: Painter,
-    @DrawableRes  val unSelectedIcon: Painter,
+    val selectedIcon: Painter,
+    val unSelectedIcon: Painter,
 )

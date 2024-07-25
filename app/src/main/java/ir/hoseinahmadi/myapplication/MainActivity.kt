@@ -10,12 +10,14 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
@@ -65,6 +67,7 @@ class MainActivity : ComponentActivity() {
                     val backStackEntry = navHostController.currentBackStackEntryAsState()
                     val show = backStackEntry.value?.destination?.route in item.map { it.route }
                     Scaffold(
+                        containerColor = Color.White,
                         bottomBar = {
                             AnimatedVisibility(
                                 visible = show,
@@ -83,6 +86,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(innerPadding)
+                                .background(Color.White)
                         ) {
                             NavGraph(navHostController = navHostController)
                         }

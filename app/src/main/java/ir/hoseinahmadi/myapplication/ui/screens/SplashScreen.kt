@@ -39,19 +39,19 @@ fun SplashScreen(navHostController: NavHostController) {
         Image(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .size(400.dp, 200.dp),
+                .size(400.dp, 205.dp),
             painter = painterResource(id = R.drawable.splash_top),
             contentDescription = "",
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.FillBounds
         )
 
         Image(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .size(400.dp, 200.dp),
+                .size(400.dp, 205.dp),
             painter = painterResource(id = R.drawable.splash_bottom),
             contentDescription = "",
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.FillBounds
         )
         Image(
             modifier = Modifier
