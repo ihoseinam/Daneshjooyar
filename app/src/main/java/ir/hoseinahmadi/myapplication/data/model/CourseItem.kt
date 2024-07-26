@@ -7,9 +7,9 @@ data class CourseSection(
 )
 
 data class CourseItem(
-    val id:Int,
-    val title:String,
-    val image:String,
-    val introductionVideo:String,
-    val section:List<CourseSection>,
+    val id:Int=0,
+    val title:String="",
+    val image:String="",
+    val introductionVideo:String = "",
+    val section:List<CourseSection> = emptyList(),
 )

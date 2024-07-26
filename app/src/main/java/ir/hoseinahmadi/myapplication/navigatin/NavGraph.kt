@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import ir.hoseinahmadi.myapplication.ui.screens.AboutScreen
+import ir.hoseinahmadi.myapplication.ui.screens.CourseDetailScreen
 import ir.hoseinahmadi.myapplication.ui.screens.DocumentsScreen
 import ir.hoseinahmadi.myapplication.ui.screens.home.HomeScreen
 import ir.hoseinahmadi.myapplication.ui.screens.SplashScreen
@@ -45,9 +46,23 @@ fun NavGraph(navHostController: NavHostController) {
         composable(route = Screen.Documents.route) {
             DocumentsScreen(navHostController)
         }
-         composable(route = Screen.About.route) {
-             AboutScreen(navHostController)
+        composable(route = Screen.About.route) {
+            AboutScreen(navHostController)
         }
+        composable(
+            Screen.CourseDetail.route + "?data={data}",
+            arguments = listOf(navArgument("data") {
+                type = NavType.StringType
+                defaultValue =""
+            })
+        ) {
+            it.arguments?.getString("data")?.let { data ->
+                CourseDetailScreen(
+                    navHostController = navHostController,
+                    data = data
+                )
+            }
 
+        }
     }
 }

@@ -5,12 +5,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import com.google.gson.Gson
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
+import ir.hoseinahmadi.myapplication.navigatin.Screen
 import ir.hoseinahmadi.myapplication.ui.screens.home.CourseItemCard
 
 @Composable
-fun MobileCategory() {
+fun MobileCategory(navHostController: NavHostController) {
 
     val item = listOf<CourseItem>(
         CourseItem(
@@ -46,8 +49,11 @@ fun MobileCategory() {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-        items(item) {
-            CourseItemCard(it)
+        items(item) {courseItem->
+            CourseItemCard(courseItem){
+                val data =Gson().toJson(courseItem)
+                navHostController.navigate(Screen.CourseDetail.route+"?data=$data")
+            }
         }
     }
 

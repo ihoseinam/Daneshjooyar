@@ -24,14 +24,14 @@ import ir.hoseinahmadi.myapplication.data.model.CourseItem
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun CourseItemCard(item: CourseItem) {
+fun CourseItemCard(item: CourseItem,onClick :()->Unit) {
     Card(
         modifier = Modifier.padding(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(2.dp),
-        onClick = { }) {
+        onClick = onClick) {
         Column(
             modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally

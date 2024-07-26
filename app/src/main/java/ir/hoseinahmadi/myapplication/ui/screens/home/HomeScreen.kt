@@ -60,7 +60,7 @@ fun HomeScreen(navHostController: NavHostController) {
                 .padding(innerPadding),
             state = pagerState
         ) {
-            MobileCategory()
+            MobileCategory(navHostController)
         }
     }
 }
