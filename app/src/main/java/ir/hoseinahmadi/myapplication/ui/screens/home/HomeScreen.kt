@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.HomeCategory
+import ir.hoseinahmadi.myapplication.ui.screens.home.cat.MobileCategory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,7 +60,7 @@ fun HomeScreen(navHostController: NavHostController) {
                 .padding(innerPadding),
             state = pagerState
         ) {
-            Text(text = tabItem[it].title)
+            MobileCategory()
         }
     }
 }
