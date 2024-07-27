@@ -32,12 +32,12 @@ fun MobileCategory(navHostController: NavHostController) {
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/S00-Part02-what-is-android.mp4",
                 ),
               CourseSection(
-                    id = 21,
+                    id = 22,
                     title = "مسیر و نقشه راه برنامه نویسی موبایل (چگونه برنامه نویس موبایل شویم؟)",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/S00-Part03-android-path.mp4",
                 ),
                 CourseSection(
-                    id = 21,
+                    id = 23,
                     title = "کاتلین یا جاوا؟ چرا زبان کاتلین بهتر است؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/S00-Part05-kotlin-or-java.mp4",
                 ),
