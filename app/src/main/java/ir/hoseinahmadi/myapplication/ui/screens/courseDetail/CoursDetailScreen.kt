@@ -59,6 +59,7 @@ import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
 import ir.hoseinahmadi.myapplication.navigatin.Screen
+import ir.hoseinahmadi.myapplication.utils.Helper
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -162,13 +163,13 @@ fun VideoTrailer(video: String, orientation: Int) {
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
-                then (
+            .then(
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     Modifier.fillMaxHeight()
                 } else {
                     Modifier.height(210.dp)
                 }
-                )
+            )
     )
 }
 
@@ -176,7 +177,11 @@ fun VideoTrailer(video: String, orientation: Int) {
 fun VideoList(data: List<CourseSection>, image: String, navHostController: NavHostController) {
     LazyColumn(Modifier.padding(10.dp)) {
         itemsIndexed(items = data) { index, item ->
-            PlayListItemCard(image = image, title = item.title) {
+            PlayListItemCard(
+                image = image,
+                title = "${Helper.byLocate((index + 1).toString())}. ${item.title}",
+
+                ) {
                 val senData = Gson().toJson(data)
                 navHostController.navigate(Screen.Player.route + "?data=$senData?index=$index")
             }

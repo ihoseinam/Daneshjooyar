@@ -8,8 +8,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -29,10 +31,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.media3.exoplayer.analytics.AnalyticsListener
@@ -44,10 +50,12 @@ import io.sanghun.compose.video.VideoPlayer
 import io.sanghun.compose.video.cache.VideoPlayerCacheManager
 import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
 import io.sanghun.compose.video.uri.VideoPlayerMediaItem
+import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
 import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.TopBar
 import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
+import ir.hoseinahmadi.myapplication.utils.Helper
 
 @Composable
 fun PlayerScreen(
@@ -89,12 +97,15 @@ fun PlayerScreen(
                     .padding(vertical = 5.dp, horizontal = 2.dp),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                val enableBackButton =playerVideoIndex > 0
-                val enableForwardButton =playerVideoIndex < item.size - 1
+                val enableBackButton = playerVideoIndex > 0
+                val enableForwardButton = playerVideoIndex < item.size - 1
                 OutlinedButton(
-                    border = BorderStroke(1.dp, color =  if (enableBackButton) startLinearGradient else Color.LightGray),
+                    border = BorderStroke(
+                        1.dp,
+                        color = if (enableBackButton) startLinearGradient else Color.LightGray
+                    ),
                     shape = RoundedCornerShape(8.dp),
-                    enabled =enableBackButton ,
+                    enabled = enableBackButton,
                     onClick = {
                         if (playerVideoIndex > 0) {
                             playerVideoIndex--
@@ -110,18 +121,21 @@ fun PlayerScreen(
                             imageVector = Icons.Rounded.PlayArrow,
                             contentDescription = "",
                             modifier = Modifier.size(17.dp),
-                            tint =if (enableBackButton) startLinearGradient else Color.LightGray
+                            tint = if (enableBackButton) startLinearGradient else Color.LightGray
                         )
                         Text(
                             text = "قسمت قبلی",
-                            color =if (enableBackButton) startLinearGradient else Color.LightGray,
+                            color = if (enableBackButton) startLinearGradient else Color.LightGray,
                             style = MaterialTheme.typography.bodyLarge
                         )
 
                     }
                 }
                 OutlinedButton(
-                    border = BorderStroke(1.dp, color =  if (enableForwardButton) startLinearGradient else Color.LightGray),
+                    border = BorderStroke(
+                        1.dp,
+                        color = if (enableForwardButton) startLinearGradient else Color.LightGray
+                    ),
                     shape = RoundedCornerShape(8.dp),
                     enabled = enableForwardButton,
                     onClick = {
@@ -138,7 +152,7 @@ fun PlayerScreen(
 
                         Text(
                             text = "قسمت بعدی",
-                            color =if (enableForwardButton) startLinearGradient else Color.LightGray,
+                            color = if (enableForwardButton) startLinearGradient else Color.LightGray,
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Icon(
@@ -147,7 +161,7 @@ fun PlayerScreen(
                             modifier = Modifier
                                 .rotate(180f)
                                 .size(17.dp),
-                            tint =if (enableForwardButton) startLinearGradient else Color.LightGray
+                            tint = if (enableForwardButton) startLinearGradient else Color.LightGray
                         )
                     }
                 }
@@ -158,13 +172,19 @@ fun PlayerScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Text(text = item[playerVideoIndex].title)
+            Text(
+                text ="${Helper.byLocate((playerVideoIndex+1).toString())}. ${item[playerVideoIndex].title}" ,
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 15.dp, vertical = 12.dp),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Bold,
+            )
             VideoPlayer(
                 mediaItems = listOf<VideoPlayerMediaItem>(
                     VideoPlayerMediaItem.NetworkMediaItem(urlPlayer)
                 ),
                 handleLifecycle = true,
-                autoPlay = false,
+                autoPlay = true,
                 usePlayerController = true,
                 enablePip = false,
                 handleAudioFocus = true,
@@ -182,14 +202,13 @@ fun PlayerScreen(
                     showFullScreenButton = true,
                     controllerAutoShow = true,
                 ),
-                volume = 0.6f,  // volume 0.0f to 1.0f
-                repeatMode = RepeatMode.NONE,       // or RepeatMode.ALL, RepeatMode.ONE
-                onCurrentTimeChanged = { // long type, current player time (millisec)
+                repeatMode = RepeatMode.NONE,
+                onCurrentTimeChanged = {
                     Log.e("CurrentTime", it.toString())
                 },
                 enablePipWhenBackPressed = true,
-                fullScreenSecurePolicy = SecureFlagPolicy.SecureOn, // فعال کردن حالت ایمن
-                playerInstance = { // ExoPlayer instance (Experimental)
+                fullScreenSecurePolicy = SecureFlagPolicy.SecureOn,
+                playerInstance = {
                     addAnalyticsListener(
                         object : AnalyticsListener {
                             // player logger
@@ -198,7 +217,25 @@ fun PlayerScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
+                    .padding(horizontal = 10.dp, vertical =8.dp )
+                    .clip(RoundedCornerShape(16.dp))
+                    .then(
+                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            Modifier.fillMaxHeight()
+                        } else {
+                            Modifier.height(210.dp)
+                        }
+                    )
+            )
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(14.dp),
+                text = stringResource(id = R.string.lorm),
+                textAlign = TextAlign.Start,
+                color = Color.DarkGray,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
             )
         }
     }
