@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -62,6 +63,8 @@ import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
 import ir.hoseinahmadi.myapplication.utils.Helper
 import ir.hoseinahmadi.myapplication.viewModel.CourseViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
@@ -114,7 +117,11 @@ fun PlayerScreen(
                     addWatchedRange(watchedRangesState.value, start, previousTimeState.value)
                     currentStartTime = null
                 }
-                viewModel.upsertCourseItem(currentCourseIdState.value, watchedRangesState.value, totalDurationState.value.longValue)
+                viewModel.upsertCourseItem(
+                    currentCourseIdState.value,
+                    watchedRangesState.value,
+                    totalDurationState.value.longValue
+                )
             }
         }
         lifecycle.addObserver(observer)
@@ -267,7 +274,8 @@ fun PlayerScreen(
                             }
                         }
                         previousTime = currentTime
-                        watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
+                        watchedPercentage =
+                            calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
                     }
                 },
                 fullScreenSecurePolicy = SecureFlagPolicy.SecureOn,
@@ -286,7 +294,10 @@ fun PlayerScreen(
                         override fun onPlaybackStateChanged(state: Int) {
                             if (state == Player.STATE_READY) {
                                 totalDuration.longValue = duration
-                                watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
+                                watchedPercentage = calculateWatchedPercentage(
+                                    watchedRanges,
+                                    totalDuration.longValue
+                                )
                             }
                         }
                     })
@@ -305,12 +316,17 @@ fun PlayerScreen(
                     )
             )
 
-            // Display watched percentage
-            Text(text = "Watched: ${String.format("%.2f", watchedPercentage)}%")
+
+            Slider(
+                enabled = false,
+                value = watchedPercentage , // Convert percentage to a value between 0 and 1
+                onValueChange = {},
+                valueRange = 0f..100f
+            )
+            Text(text =(watchedPercentage).roundToInt().toString() +"%" )
         }
     }
 }
-
 
 
 fun addWatchedRange(ranges: MutableList<Pair<Long, Long>>, start: Long, end: Long) {
