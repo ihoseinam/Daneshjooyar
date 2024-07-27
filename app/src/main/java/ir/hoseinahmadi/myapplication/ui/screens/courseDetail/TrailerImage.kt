@@ -49,6 +49,7 @@ fun TrailerImage(image: String, onClick: () -> Unit) {
             modifier = Modifier
                 .clip(CircleShape)
                 .background(Brush.linearGradient(listOf(startLinearGradient, endLinearGradient)))
+                .border(2.dp, Color.White,CircleShape)
         ) {
             IconButton(onClick = onClick) {
                 Icon(

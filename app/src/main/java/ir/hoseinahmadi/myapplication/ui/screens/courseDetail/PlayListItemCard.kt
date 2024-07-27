@@ -40,7 +40,7 @@ fun PlayListItemCard(image: String, title: String, onClick: () -> Unit) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 4.dp, vertical = 12.dp),
+                .padding(horizontal = 8.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {

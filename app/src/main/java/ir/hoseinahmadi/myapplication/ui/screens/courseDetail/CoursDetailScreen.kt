@@ -175,12 +175,11 @@ fun VideoTrailer(video: String, orientation: Int) {
 
 @Composable
 fun VideoList(data: List<CourseSection>, image: String, navHostController: NavHostController) {
-    LazyColumn(Modifier.padding(10.dp)) {
+    LazyColumn {
         itemsIndexed(items = data) { index, item ->
             PlayListItemCard(
                 image = image,
                 title = "${Helper.byLocate((index + 1).toString())}. ${item.title}",
-
                 ) {
                 val senData = Gson().toJson(data)
                 navHostController.navigate(Screen.Player.route + "?data=$senData?index=$index")
