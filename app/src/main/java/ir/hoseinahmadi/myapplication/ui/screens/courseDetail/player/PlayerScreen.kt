@@ -24,10 +24,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,10 +38,15 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.media3.common.Player
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
@@ -76,7 +83,6 @@ fun PlayerScreen(
     var playerVideoIndex by remember { mutableIntStateOf(videoIndex) }
     val urlPlayer = item[playerVideoIndex].videoUri
 
-    // Initialize states
     var watchedRanges by remember { mutableStateOf<MutableList<Pair<Long, Long>>>(mutableListOf()) }
     var currentStartTime by remember { mutableStateOf<Long?>(null) }
     val totalDuration = remember { mutableLongStateOf(0L) }
@@ -84,31 +90,36 @@ fun PlayerScreen(
     var previousTime by remember { mutableLongStateOf(0L) }
     val currentCourseId = item[playerVideoIndex].id
 
-    // State for watched percentage
-    var watchedPercentage by remember { mutableStateOf(0f) }
+    var watchedPercentage by remember { mutableFloatStateOf(0f) }
 
-    // Load watched ranges from database when the video index changes
     LaunchedEffect(playerVideoIndex) {
         viewModel.getWatchedRanges(currentCourseId).collectLatest { ranges ->
             watchedRanges = ranges.toMutableList()
-            // Recalculate watched percentage whenever ranges change
             watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
         }
     }
 
-    // Update watched percentage in real-time
-    LaunchedEffect(watchedRanges, totalDuration.longValue) {
-        watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
-    }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycle = lifecycleOwner.lifecycle
+    val currentStartTimeState = rememberUpdatedState(currentStartTime)
+    val watchedRangesState = rememberUpdatedState(watchedRanges)
+    val previousTimeState = rememberUpdatedState(previousTime)
+    val currentCourseIdState = rememberUpdatedState(currentCourseId)
+    val totalDurationState = rememberUpdatedState(totalDuration)
 
-    // Save watched ranges when the screen closes or video changes
-    DisposableEffect(playerVideoIndex) {
-        onDispose {
-            currentStartTime?.let { start ->
-                addWatchedRange(watchedRanges, start, previousTime)
-                currentStartTime = null
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                currentStartTimeState.value?.let { start ->
+                    addWatchedRange(watchedRangesState.value, start, previousTimeState.value)
+                    currentStartTime = null
+                }
+                viewModel.upsertCourseItem(currentCourseIdState.value, watchedRangesState.value, totalDurationState.value.longValue)
             }
-            viewModel.upsertCourseItem(currentCourseId, watchedRanges, totalDuration.longValue)
+        }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
         }
     }
     Scaffold(
@@ -197,7 +208,6 @@ fun PlayerScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(innerPadding)
         ) {
             if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
@@ -242,18 +252,13 @@ fun PlayerScreen(
                             currentStartTime = currentTime
                         }
 
-                        // Detect backward seek
                         if (currentTime < previousTime) {
-                            // Finalize the current watching segment before the backward seek
                             currentStartTime?.let { start ->
                                 addWatchedRange(watchedRanges, start, previousTime)
                             }
                             currentStartTime = null
                         } else {
-                            // Threshold time to consider as "watched" (1 second = 1000ms)
                             val threshold = 1000L
-
-                            // Update watched ranges
                             if (currentTime - (currentStartTime ?: 0) > threshold) {
                                 currentStartTime?.let { start ->
                                     addWatchedRange(watchedRanges, start, currentTime)
@@ -262,6 +267,7 @@ fun PlayerScreen(
                             }
                         }
                         previousTime = currentTime
+                        watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
                     }
                 },
                 fullScreenSecurePolicy = SecureFlagPolicy.SecureOn,
@@ -280,6 +286,7 @@ fun PlayerScreen(
                         override fun onPlaybackStateChanged(state: Int) {
                             if (state == Player.STATE_READY) {
                                 totalDuration.longValue = duration
+                                watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
                             }
                         }
                     })
@@ -305,13 +312,13 @@ fun PlayerScreen(
 }
 
 
+
 fun addWatchedRange(ranges: MutableList<Pair<Long, Long>>, start: Long, end: Long) {
-    if (start >= end) return  // Ignore invalid ranges
+    if (start >= end) return
 
     var newRange = start to end
     val updatedRanges = mutableListOf<Pair<Long, Long>>()
 
-    // Insert the new range in the correct position
     var inserted = false
     for (range in ranges) {
         if (newRange.second < range.first) {
@@ -323,7 +330,6 @@ fun addWatchedRange(ranges: MutableList<Pair<Long, Long>>, start: Long, end: Lon
         } else if (newRange.first > range.second) {
             updatedRanges.add(range)
         } else {
-            // Merge overlapping ranges
             newRange =
                 minOf(newRange.first, range.first) to maxOf(newRange.second, range.second)
         }
