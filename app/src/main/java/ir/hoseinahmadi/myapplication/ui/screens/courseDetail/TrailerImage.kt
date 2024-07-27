@@ -29,7 +29,7 @@ import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun TrailerVideoImage(image: String, onClick: () -> Unit) {
+fun TrailerImage(image: String, onClick: () -> Unit) {
     Box(
         contentAlignment = Alignment.Center, modifier = Modifier
             .fillMaxWidth()

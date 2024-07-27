@@ -3,12 +3,11 @@ package ir.hoseinahmadi.myapplication.ui.screens.courseDetail
 import android.app.Activity
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,11 +19,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -39,9 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -60,11 +57,10 @@ import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
 import io.sanghun.compose.video.uri.VideoPlayerMediaItem
 import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
-import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
-import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
+import ir.hoseinahmadi.myapplication.data.model.CourseSection
 
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CourseDetailScreen(
     navHostController: NavHostController,
@@ -79,18 +75,17 @@ fun CourseDetailScreen(
     var item by remember {
         mutableStateOf<CourseItem>(CourseItem())
     }
-
     val listTypeToken = object : TypeToken<CourseItem>() {}.type
     item = Gson().fromJson(data, listTypeToken)
 
     var isPlaying by remember { mutableStateOf(false) }
-    var videoItemUrl by remember { mutableStateOf(item.introductionVideo) }
+    val pagerState = rememberPagerState { 2 }
     Scaffold(
         topBar = {
-            if(orientation!= Configuration.ORIENTATION_LANDSCAPE)
-            TopBar {
-                navHostController.navigateUp()
-            }
+            if (orientation != Configuration.ORIENTATION_LANDSCAPE)
+                TopBar {
+                    navHostController.navigateUp()
+                }
         }
     ) { innerPadding ->
         Column(
@@ -99,84 +94,20 @@ fun CourseDetailScreen(
                 .padding(innerPadding)
         ) {
             if (!isPlaying) {
-                TrailerVideoImage(image = item.image) {
+                TrailerImage(image = item.image) {
                     isPlaying = true
                 }
             } else {
-                VideoPlayer(
-                    mediaItems = listOf<VideoPlayerMediaItem>(
-                        VideoPlayerMediaItem.NetworkMediaItem(
-                            item.introductionVideo
-                        )
-                    ),
-                    handleLifecycle = true,
-                    autoPlay = false,
-                    usePlayerController = true,
-                    enablePip = false,
-                    handleAudioFocus = true,
-                    controllerConfig = VideoPlayerControllerConfig(
-                        showSpeedAndPitchOverlay = true,
-                        showSubtitleButton = false,
-                        showCurrentTimeAndTotalTime = true,
-                        showBufferingProgress = true,
-                        showForwardIncrementButton = true,
-                        showBackwardIncrementButton = true,
-                        showBackTrackButton = false,
-                        showNextTrackButton = false,
-                        showRepeatModeButton = false,
-                        controllerShowTimeMilliSeconds = 5_000,
-                        showFullScreenButton = true,
-                        controllerAutoShow = true,
-                    ),
-                    volume = 0.6f,  // volume 0.0f to 1.0f
-                    repeatMode = RepeatMode.NONE,       // or RepeatMode.ALL, RepeatMode.ONE
-                    onCurrentTimeChanged = { // long type, current player time (millisec)
-                        Log.e("CurrentTime", it.toString())
-                    },
-                    enablePipWhenBackPressed = true,
-                    fullScreenSecurePolicy = SecureFlagPolicy.SecureOn, // فعال کردن حالت ایمن
-                    playerInstance = { // ExoPlayer instance (Experimental)
-                        addAnalyticsListener(
-                            object : AnalyticsListener {
-                                // player logger
-                            }
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                            then (
-                            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                Modifier.fillMaxHeight()
-                            } else {
-                                Modifier.height(210.dp)
-                            }
-                            )
-                )
+                VideoTrailer(item.introductionVideo, orientation)
             }
-            LazyColumn(Modifier.padding(10.dp)) {
-                itemsIndexed(items = item.section) { index, items ->
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                videoItemUrl = items.videoUri
-                            },
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        GlideImage(model = item.image, contentDescription = "video thumbnail")
-                        Text(
-                            text = items.title,
-                            Modifier.weight(1f)
-                        )
-                    }
-                    Divider(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp)
-                    )
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
+            ) {pagState->
+                if (pagState==1){
+                    VideoList(item.section,item.image)
+                }else{
+                    InfoTeacher()
                 }
             }
         }
@@ -184,7 +115,86 @@ fun CourseDetailScreen(
 
 }
 
+@Composable
+fun VideoTrailer(video: String, orientation: Int) {
+    VideoPlayer(
+        mediaItems = listOf<VideoPlayerMediaItem>(
+            VideoPlayerMediaItem.NetworkMediaItem(video)
+        ),
+        handleLifecycle = true,
+        autoPlay = false,
+        usePlayerController = true,
+        enablePip = false,
+        handleAudioFocus = true,
+        controllerConfig = VideoPlayerControllerConfig(
+            showSpeedAndPitchOverlay = true,
+            showSubtitleButton = false,
+            showCurrentTimeAndTotalTime = true,
+            showBufferingProgress = true,
+            showForwardIncrementButton = true,
+            showBackwardIncrementButton = true,
+            showBackTrackButton = false,
+            showNextTrackButton = false,
+            showRepeatModeButton = false,
+            controllerShowTimeMilliSeconds = 5_000,
+            showFullScreenButton = true,
+            controllerAutoShow = true,
+        ),
+        volume = 0.6f,  // volume 0.0f to 1.0f
+        repeatMode = RepeatMode.NONE,       // or RepeatMode.ALL, RepeatMode.ONE
+        onCurrentTimeChanged = { // long type, current player time (millisec)
+            Log.e("CurrentTime", it.toString())
+        },
+        enablePipWhenBackPressed = true,
+        fullScreenSecurePolicy = SecureFlagPolicy.SecureOn, // فعال کردن حالت ایمن
+        playerInstance = { // ExoPlayer instance (Experimental)
+            addAnalyticsListener(
+                object : AnalyticsListener {
+                    // player logger
+                }
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clip(RoundedCornerShape(16.dp))
+                then (
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    Modifier.fillMaxHeight()
+                } else {
+                    Modifier.height(210.dp)
+                }
+                )
+    )
+}
 
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun VideoList(data:List<CourseSection>,image:String){
+    LazyColumn(Modifier.padding(10.dp)) {
+        itemsIndexed(items = data) { index, item ->
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {},
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                GlideImage(model = image, contentDescription = "video thumbnail")
+                Text(
+                    text = item.title,
+                    Modifier.weight(1f)
+                )
+            }
+            Divider(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp)
+            )
+        }
+    }
+
+}
 
 
 @Composable
