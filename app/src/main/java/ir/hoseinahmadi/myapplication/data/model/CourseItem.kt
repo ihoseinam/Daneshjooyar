@@ -1,9 +1,9 @@
 package ir.hoseinahmadi.myapplication.data.model
 
 data class CourseSection(
-    val id: Int,
-    val title: String,
-    val videoUri:String,
+    val id: Int=-0,
+    val title: String="",
+    val videoUri:String="",
 )
 
 data class CourseItem(

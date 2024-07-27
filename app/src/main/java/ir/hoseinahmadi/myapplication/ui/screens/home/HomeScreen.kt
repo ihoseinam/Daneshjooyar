@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import ir.hoseinahmadi.myapplication.R
@@ -47,6 +48,7 @@ fun HomeScreen(navHostController: NavHostController) {
         )
     val pagerState = rememberPagerState { tabItem.size }
     Scaffold(
+        containerColor = Color.White,
         topBar = {
             TabSection(
                 pagerState = pagerState,

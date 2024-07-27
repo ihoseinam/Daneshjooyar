@@ -1,4 +1,4 @@
-package ir.hoseinahmadi.myapplication.ui.screens.courseDetail
+package ir.hoseinahmadi.myapplication.ui.screens.home.cat
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

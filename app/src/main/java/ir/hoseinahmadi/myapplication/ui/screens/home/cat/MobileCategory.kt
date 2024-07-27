@@ -10,7 +10,6 @@ import com.google.gson.Gson
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
 import ir.hoseinahmadi.myapplication.navigatin.Screen
-import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.CourseItemCard
 
 @Composable
 fun MobileCategory(navHostController: NavHostController) {

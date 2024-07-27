@@ -41,8 +41,9 @@ fun TabSection(
 ) {
     val scope = rememberCoroutineScope()
     ScrollableTabRow(
+        containerColor = Color.White,
         modifier = Modifier.fillMaxWidth()
-            .padding(bottom = 15.dp),
+            .padding(bottom = 15.dp, top = 5.dp),
         indicator = {},
         divider = {},
         selectedTabIndex = pagerState.currentPage

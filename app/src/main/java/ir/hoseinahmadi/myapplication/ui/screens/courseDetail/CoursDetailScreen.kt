@@ -58,9 +58,10 @@ import io.sanghun.compose.video.uri.VideoPlayerMediaItem
 import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
+import ir.hoseinahmadi.myapplication.navigatin.Screen
 
 
-@OptIn(ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CourseDetailScreen(
     navHostController: NavHostController,
@@ -81,6 +82,7 @@ fun CourseDetailScreen(
     var isPlaying by remember { mutableStateOf(false) }
     val pagerState = rememberPagerState { 2 }
     Scaffold(
+        containerColor = Color.White,
         topBar = {
             if (orientation != Configuration.ORIENTATION_LANDSCAPE)
                 TopBar {
@@ -104,12 +106,13 @@ fun CourseDetailScreen(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
-            ) {pagState->
-                if (pagState==1){
-                    VideoList(item.section,item.image)
-                }else{
-                    InfoTeacher()
+            ) { pagState ->
+                when (pagState) {
+                    0 -> InfoTeacher()
+                    else -> VideoList(item.section, item.image, navHostController)
+
                 }
+
             }
         }
     }
@@ -169,29 +172,14 @@ fun VideoTrailer(video: String, orientation: Int) {
     )
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun VideoList(data:List<CourseSection>,image:String){
+fun VideoList(data: List<CourseSection>, image: String, navHostController: NavHostController) {
     LazyColumn(Modifier.padding(10.dp)) {
         itemsIndexed(items = data) { index, item ->
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .clickable {},
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                GlideImage(model = image, contentDescription = "video thumbnail")
-                Text(
-                    text = item.title,
-                    Modifier.weight(1f)
-                )
+            PlayListItemCard(image = image, title = item.title) {
+                val senData = Gson().toJson(data)
+                navHostController.navigate(Screen.Player.route + "?data=$senData?index=$index")
             }
-            Divider(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 6.dp)
-            )
         }
     }
 
@@ -199,7 +187,7 @@ fun VideoList(data:List<CourseSection>,image:String){
 
 
 @Composable
-private fun TopBar(onClick: () -> Unit) {
+fun TopBar(onClick: () -> Unit) {
     Column {
         Row(
             modifier = Modifier
