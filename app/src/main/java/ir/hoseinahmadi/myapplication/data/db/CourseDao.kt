@@ -16,5 +16,5 @@ interface CourseDao {
     suspend fun upsertCourseItem(courseItemDb: CourseItemDb)
 
     @Query("SELECT * FROM CourseItemDb WHERE id = :id")
-    suspend fun getCourseItem(id: Int): CourseItemDb?
+    fun getCourseItem2(id: Int): Flow<CourseItemDb>
 }

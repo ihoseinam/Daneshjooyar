@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,12 +23,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,8 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.navigation.NavHostController
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.sanghun.compose.video.RepeatMode
@@ -178,12 +173,14 @@ fun VideoList(data: List<CourseSection>, image: String, navHostController: NavHo
     LazyColumn {
         itemsIndexed(items = data) { index, item ->
             PlayListItemCard(
+                id = item.id,
                 image = image,
                 title = "${Helper.byLocate((index + 1).toString())}. ${item.title}",
-                ) {
-                val senData = Gson().toJson(data)
-                navHostController.navigate(Screen.Player.route + "?data=$senData?index=$index")
-            }
+                onClick = {
+                    val senData = Gson().toJson(data)
+                    navHostController.navigate(Screen.Player.route + "?data=$senData?index=$index")
+                }
+            )
         }
     }
 

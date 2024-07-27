@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ir.hoseinahmadi.myapplication.data.db.CourseDao
 import ir.hoseinahmadi.myapplication.data.model.CourseItemDb
+import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.player.calculateWatchedPercentage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -11,6 +12,9 @@ import javax.inject.Inject
 class CourseRepository @Inject constructor(
     private val dao: CourseDao
 ) {
+    fun getCourseItem(id:Int) :Flow<CourseItemDb> =dao.getCourseItem2(id)
+
+
     fun getWatchedRanges(id: Int): Flow<List<Pair<Long, Long>>> =
         dao.getWatchedRanges(id).map { json ->
             deserializeWatchedRanges(json)
