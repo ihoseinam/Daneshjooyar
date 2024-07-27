@@ -15,12 +15,13 @@ class CourseViewModel @Inject constructor(
     private val repository: CourseRepository
 ) : ViewModel() {
 
-    fun getWatchRange(id: Int): Flow<Float> =repository.getWatchRange(id)
+    fun getWatchedRanges(id: Int): Flow<List<Pair<Long, Long>>> = repository.getWatchedRanges(id)
 
-     fun upsertCourseItem(itemDb: CourseItemDb){
-         viewModelScope.launch(Dispatchers.IO) {
-             repository.upsertCourseItem(itemDb)
-         }
-     }
-
+    fun upsertCourseItem(id: Int, watchedRanges: List<Pair<Long, Long>>, totalDuration: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val serializedRanges = repository.serializeWatchedRanges(watchedRanges)
+            val itemDb = CourseItemDb(id = id, watchedRanges = serializedRanges, totalDuration = totalDuration)
+            repository.upsertCourseItem(itemDb)
+        }
+    }
 }

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class CourseItemDb(
-    @PrimaryKey
-    val id:Int,
-    var watchDuration :Float=0f
+    @PrimaryKey val id: Int,
+    var watchedRanges: String = "[]",
+    var totalDuration: Long = 0L
 )

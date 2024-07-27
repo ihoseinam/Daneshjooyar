@@ -8,10 +8,13 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CourseDao {
+
+    @Query("SELECT watchedRanges FROM CourseItemDb WHERE id = :id")
+    fun getWatchedRanges(id: Int): Flow<String>
+
     @Upsert
-    suspend fun upsertCourseItem(itemDb: CourseItemDb)
+    suspend fun upsertCourseItem(courseItemDb: CourseItemDb)
 
-    @Query("select watchDuration from CourseItemDb where id=:id")
-    fun getWatchRange(id: Int): Flow<Float>
-
+    @Query("SELECT * FROM CourseItemDb WHERE id = :id")
+    suspend fun getCourseItem(id: Int): CourseItemDb?
 }
