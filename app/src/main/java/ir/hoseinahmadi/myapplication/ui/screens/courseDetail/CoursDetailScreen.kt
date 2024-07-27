@@ -145,7 +145,7 @@ fun VideoTrailer(video: String, orientation: Int) {
         onCurrentTimeChanged = { // long type, current player time (millisec)
             Log.e("CurrentTime", it.toString())
         },
-        enablePipWhenBackPressed = true,
+        enablePipWhenBackPressed = false,
         fullScreenSecurePolicy = SecureFlagPolicy.SecureOn, // فعال کردن حالت ایمن
         playerInstance = { // ExoPlayer instance (Experimental)
             addAnalyticsListener(

@@ -2,16 +2,20 @@ package ir.hoseinahmadi.myapplication.ui.screens.courseDetail.player
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER
+import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -110,7 +114,7 @@ fun PlayerScreen(
     val currentCourseIdState = rememberUpdatedState(currentCourseId)
     val totalDurationState = rememberUpdatedState(totalDuration)
 
-    DisposableEffect(lifecycle) {
+    DisposableEffect(lifecycle,playerVideoIndex) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_STOP) {
                 currentStartTimeState.value?.let { start ->
@@ -129,88 +133,101 @@ fun PlayerScreen(
             lifecycle.removeObserver(observer)
         }
     }
+
     Scaffold(
         containerColor = Color.White,
         topBar = {
-            if (orientation != Configuration.ORIENTATION_LANDSCAPE)
-                TopBar {
-                    navHostController.navigateUp()
-                }
+            if (orientation != Configuration.ORIENTATION_LANDSCAPE){
+                TopBar { navHostController.navigateUp() }
+            }
         },
         bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp, horizontal = 2.dp),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                val enableBackButton = playerVideoIndex > 0
-                val enableForwardButton = playerVideoIndex < item.size - 1
-                OutlinedButton(
-                    border = BorderStroke(
-                        1.dp,
-                        color = if (enableBackButton) startLinearGradient else Color.LightGray
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    enabled = enableBackButton,
-                    onClick = {
-                        if (playerVideoIndex > 0) {
-                            playerVideoIndex--
+            if (orientation != Configuration.ORIENTATION_LANDSCAPE){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp, horizontal = 2.dp),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    val enableBackButton = playerVideoIndex > 0
+                    val enableForwardButton = playerVideoIndex < item.size - 1
+                    OutlinedButton(
+                        border = BorderStroke(
+                            1.dp,
+                            color = if (enableBackButton) startLinearGradient else Color.LightGray
+                        ),
+                        shape = RoundedCornerShape(8.dp),
+                        enabled = enableBackButton,
+                        onClick = {
+                            if (playerVideoIndex > 0) {
+                                playerVideoIndex--
+                                viewModel.upsertCourseItem(
+                                    currentCourseIdState.value,
+                                    watchedRangesState.value,
+                                    totalDurationState.value.longValue
+                                )
+                            }
+                        }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.PlayArrow,
+                                contentDescription = "",
+                                modifier = Modifier.size(17.dp),
+                                tint = if (enableBackButton) startLinearGradient else Color.LightGray
+                            )
+                            Text(
+                                text = "قسمت قبلی",
+                                color = if (enableBackButton) startLinearGradient else Color.LightGray,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
                         }
                     }
-                ) {
-                    Row(
-                        modifier = Modifier.padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.PlayArrow,
-                            contentDescription = "",
-                            modifier = Modifier.size(17.dp),
-                            tint = if (enableBackButton) startLinearGradient else Color.LightGray
-                        )
-                        Text(
-                            text = "قسمت قبلی",
-                            color = if (enableBackButton) startLinearGradient else Color.LightGray,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
-                OutlinedButton(
-                    border = BorderStroke(
-                        1.dp,
-                        color = if (enableForwardButton) startLinearGradient else Color.LightGray
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    enabled = enableForwardButton,
-                    onClick = {
-                        if (playerVideoIndex < item.size - 1) {
-                            playerVideoIndex++
+                    OutlinedButton(
+                        border = BorderStroke(
+                            1.dp,
+                            color = if (enableForwardButton) startLinearGradient else Color.LightGray
+                        ),
+                        shape = RoundedCornerShape(8.dp),
+                        enabled = enableForwardButton,
+                        onClick = {
+                            if (playerVideoIndex < item.size - 1) {
+                                playerVideoIndex++
+                                viewModel.upsertCourseItem(
+                                    currentCourseIdState.value,
+                                    watchedRangesState.value,
+                                    totalDurationState.value.longValue
+                                )
+                            }
                         }
-                    }
-                ) {
-                    Row(
-                        modifier = Modifier.padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(
-                            text = "قسمت بعدی",
-                            color = if (enableForwardButton) startLinearGradient else Color.LightGray,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        Icon(
-                            imageVector = Icons.Rounded.PlayArrow,
-                            contentDescription = "",
-                            modifier = Modifier
-                                .rotate(180f)
-                                .size(17.dp),
-                            tint = if (enableForwardButton) startLinearGradient else Color.LightGray
-                        )
+                        Row(
+                            modifier = Modifier.padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "قسمت بعدی",
+                                color = if (enableForwardButton) startLinearGradient else Color.LightGray,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                            Icon(
+                                imageVector = Icons.Rounded.PlayArrow,
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .rotate(180f)
+                                    .size(17.dp),
+                                tint = if (enableForwardButton) startLinearGradient else Color.LightGray
+                            )
+                        }
                     }
                 }
             }
+
         }
     ) { innerPadding ->
         Column(
@@ -238,6 +255,7 @@ fun PlayerScreen(
                 usePlayerController = true,
                 enablePip = false,
                 handleAudioFocus = true,
+                enablePipWhenBackPressed = false,
                 controllerConfig = VideoPlayerControllerConfig(
                     showSpeedAndPitchOverlay = true,
                     showSubtitleButton = false,
@@ -303,15 +321,16 @@ fun PlayerScreen(
                     })
                 },
                 modifier = Modifier
-                    .padding(horizontal = 10.dp, vertical = 8.dp)
+                    .clip(RoundedCornerShape(16.dp))
+
+                    .fillMaxWidth()
+                    .padding(8.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .then(
                         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            Modifier.fillMaxSize()
+                            Modifier.wrapContentHeight()
                         } else {
-                            Modifier
-                                .fillMaxWidth()
-                                .height(210.dp)
+                            Modifier.height(210.dp)
                         }
                     )
             )

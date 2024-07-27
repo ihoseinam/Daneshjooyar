@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                     val backStackEntry = navHostController.currentBackStackEntryAsState()
                     val show = backStackEntry.value?.destination?.route in item.map { it.route }
                     Scaffold(
-                        modifier = Modifier.systemBarsPadding(),
+                        modifier = Modifier.fillMaxSize().systemBarsPadding(),
                         containerColor = Color.White,
                         topBar = {
                             AnimatedVisibility(
