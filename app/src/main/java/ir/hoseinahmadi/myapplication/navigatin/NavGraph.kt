@@ -11,6 +11,7 @@ import ir.hoseinahmadi.myapplication.ui.screens.CourseDetailScreen
 import ir.hoseinahmadi.myapplication.ui.screens.DocumentsScreen
 import ir.hoseinahmadi.myapplication.ui.screens.home.HomeScreen
 import ir.hoseinahmadi.myapplication.ui.screens.SplashScreen
+import ir.hoseinahmadi.myapplication.ui.screens.home.player.PlayerScreen
 import ir.hoseinahmadi.myapplication.ui.screens.login.EnterPhoneScreen
 import ir.hoseinahmadi.myapplication.ui.screens.login.VerifyPhoneScreen
 
@@ -53,7 +54,7 @@ fun NavGraph(navHostController: NavHostController) {
             Screen.CourseDetail.route + "?data={data}",
             arguments = listOf(navArgument("data") {
                 type = NavType.StringType
-                defaultValue =""
+                defaultValue = ""
             })
         ) {
             it.arguments?.getString("data")?.let { data ->
@@ -63,6 +64,24 @@ fun NavGraph(navHostController: NavHostController) {
                 )
             }
 
+        }
+        composable(Screen.Player.route + "?data={data}?index={index}",
+            arguments = listOf(
+                navArgument("data") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument("index") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                }
+            )
+        ) {
+            PlayerScreen(
+                navHostController = navHostController,
+                data = it.arguments?.getString("data") ?: "",
+                videoIndex = it.arguments?.getInt("index") ?: 0
+            )
         }
     }
 }

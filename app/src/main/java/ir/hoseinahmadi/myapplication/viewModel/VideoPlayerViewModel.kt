@@ -16,11 +16,11 @@ import ir.hoseinahmadi.myapplication.data.model.CourseSection
 @OptIn(UnstableApi::class)
 class VideoPlayerViewModel : ViewModel() {
     private var exoPlayer: ExoPlayer? = null
-    var index: Int = 0
-    var videoList: List<CourseSection> = listOf()
 
     fun initializePlayer(context: Context) {
-        exoPlayer = ExoPlayer.Builder(context).build()
+        if (exoPlayer == null) {
+            exoPlayer = ExoPlayer.Builder(context).build()
+        }
     }
 
     fun releasePlayer() {
@@ -29,34 +29,31 @@ class VideoPlayerViewModel : ViewModel() {
         exoPlayer = null
     }
 
-    fun playVideo() {
+    fun playVideo(videoUrl: String) {
         exoPlayer?.let { player ->
             player.apply {
                 stop()
                 clearMediaItems()
-                setMediaItem(MediaItem.fromUri(Uri.parse(videoList[index].videoUri)))
+                setMediaItem(MediaItem.fromUri(Uri.parse(videoUrl)))
                 playWhenReady = true
                 prepare()
-                play()
             }
         }
     }
 
     fun playerViewBuilder(context: Context): PlayerView {
         val activity = context as Activity
-        val playerView = PlayerView(context).apply {
+        return PlayerView(context).apply {
             player = exoPlayer
             controllerAutoShow = true
             keepScreenOn = true
             setFullscreenButtonClickListener { isFullScreen ->
-                if (isFullScreen){
-                    activity.requestedOrientation = SCREEN_ORIENTATION_USER_LANDSCAPE
-                }else{
-                    activity.requestedOrientation = SCREEN_ORIENTATION_USER
+                activity.requestedOrientation = if (isFullScreen) {
+                    SCREEN_ORIENTATION_USER_LANDSCAPE
+                } else {
+                    SCREEN_ORIENTATION_USER
                 }
             }
         }
-        return playerView
     }
-
 }

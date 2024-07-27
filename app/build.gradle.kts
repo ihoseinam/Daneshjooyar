@@ -101,4 +101,10 @@ dependencies {
     //data store
     implementation(libs.androidx.datastore.preferences)
 
+    implementation("io.sanghun:compose-video:1.2.0")
+    implementation("androidx.media3:media3-session:1.1.0") // [Required] MediaSession Extension dependency
+
+    implementation("androidx.media3:media3-exoplayer-dash:1.1.0") // [Optional] If your media item is DASH
+    implementation("androidx.media3:media3-exoplayer-hls:1.1.0") // [Optional] If your media item is HLS (m3u8..)
+
 }
