@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,11 +26,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,6 +65,7 @@ import io.sanghun.compose.video.VideoPlayer
 import io.sanghun.compose.video.cache.VideoPlayerCacheManager
 import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
 import io.sanghun.compose.video.uri.VideoPlayerMediaItem
+import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
 import ir.hoseinahmadi.myapplication.ui.screens.home.player.StreamerPlayer
 import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
@@ -86,90 +94,103 @@ fun CourseDetailScreen(
 
     var isPlaying by remember { mutableStateOf(false) }
     var videoItemUrl by remember { mutableStateOf(item.introductionVideo) }
-
-    Column {
-        if (!isPlaying) {
-            TrailerVideoImage(image = item.image) {
-                isPlaying = true
+    Scaffold(
+        topBar = {
+            if(orientation!= Configuration.ORIENTATION_LANDSCAPE)
+            TopBar {
+                navHostController.navigateUp()
             }
-        } else {
-            VideoPlayer(
-                mediaItems = listOf<VideoPlayerMediaItem>(
-                    VideoPlayerMediaItem.NetworkMediaItem(
-                        item.introductionVideo
-                    )
-                ),
-                handleLifecycle = true,
-                autoPlay = false,
-                usePlayerController = true,
-                enablePip = false,
-                handleAudioFocus = true,
-                controllerConfig = VideoPlayerControllerConfig(
-                    showSpeedAndPitchOverlay = true,
-                    showSubtitleButton = false,
-                    showCurrentTimeAndTotalTime = true,
-                    showBufferingProgress = true,
-                    showForwardIncrementButton = true,
-                    showBackwardIncrementButton = true,
-                    showBackTrackButton = false,
-                    showNextTrackButton = false,
-                    showRepeatModeButton = false,
-                    controllerShowTimeMilliSeconds = 5_000,
-                    showFullScreenButton = true,
-                    controllerAutoShow = true,
-                ),
-                volume = 0.6f,  // volume 0.0f to 1.0f
-                repeatMode = RepeatMode.NONE,       // or RepeatMode.ALL, RepeatMode.ONE
-                onCurrentTimeChanged = { // long type, current player time (millisec)
-                    Log.e("CurrentTime", it.toString())
-                },
-                enablePipWhenBackPressed = true,
-                fullScreenSecurePolicy = SecureFlagPolicy.SecureOn, // فعال کردن حالت ایمن
-                playerInstance = { // ExoPlayer instance (Experimental)
-                    addAnalyticsListener(
-                        object : AnalyticsListener {
-                            // player logger
-                        }
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                        then (
-                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            Modifier.wrapContentHeight()
-                        } else {
-                            Modifier.height(210.dp)
-                        }
-                        )
-            )
         }
-        LazyColumn(Modifier.padding(10.dp)) {
-            itemsIndexed(items = item.section) { index, items ->
-                Row(
-                    Modifier
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            if (!isPlaying) {
+                TrailerVideoImage(image = item.image) {
+                    isPlaying = true
+                }
+            } else {
+                VideoPlayer(
+                    mediaItems = listOf<VideoPlayerMediaItem>(
+                        VideoPlayerMediaItem.NetworkMediaItem(
+                            item.introductionVideo
+                        )
+                    ),
+                    handleLifecycle = true,
+                    autoPlay = false,
+                    usePlayerController = true,
+                    enablePip = false,
+                    handleAudioFocus = true,
+                    controllerConfig = VideoPlayerControllerConfig(
+                        showSpeedAndPitchOverlay = true,
+                        showSubtitleButton = false,
+                        showCurrentTimeAndTotalTime = true,
+                        showBufferingProgress = true,
+                        showForwardIncrementButton = true,
+                        showBackwardIncrementButton = true,
+                        showBackTrackButton = false,
+                        showNextTrackButton = false,
+                        showRepeatModeButton = false,
+                        controllerShowTimeMilliSeconds = 5_000,
+                        showFullScreenButton = true,
+                        controllerAutoShow = true,
+                    ),
+                    volume = 0.6f,  // volume 0.0f to 1.0f
+                    repeatMode = RepeatMode.NONE,       // or RepeatMode.ALL, RepeatMode.ONE
+                    onCurrentTimeChanged = { // long type, current player time (millisec)
+                        Log.e("CurrentTime", it.toString())
+                    },
+                    enablePipWhenBackPressed = true,
+                    fullScreenSecurePolicy = SecureFlagPolicy.SecureOn, // فعال کردن حالت ایمن
+                    playerInstance = { // ExoPlayer instance (Experimental)
+                        addAnalyticsListener(
+                            object : AnalyticsListener {
+                                // player logger
+                            }
+                        )
+                    },
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            videoItemUrl = items.videoUri
-                        },
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    GlideImage(model = item.image, contentDescription = "video thumbnail")
-                    Text(
-                        text = items.title,
-                        Modifier.weight(1f)
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                            then (
+                            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                Modifier.fillMaxHeight()
+                            } else {
+                                Modifier.height(210.dp)
+                            }
+                            )
+                )
+            }
+            LazyColumn(Modifier.padding(10.dp)) {
+                itemsIndexed(items = item.section) { index, items ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                videoItemUrl = items.videoUri
+                            },
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        GlideImage(model = item.image, contentDescription = "video thumbnail")
+                        Text(
+                            text = items.title,
+                            Modifier.weight(1f)
+                        )
+                    }
+                    Divider(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 6.dp)
                     )
                 }
-                Divider(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 6.dp)
-                )
             }
         }
     }
+
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -207,5 +228,54 @@ private fun TrailerVideoImage(image: String, onClick: () -> Unit) {
             }
         }
 
+    }
+}
+
+@Composable
+private fun TopBar(onClick: () -> Unit) {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(65.dp)
+                .padding(horizontal = 8.dp)
+                .background(Color.White),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(
+                onClick = onClick
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowForward,
+                    contentDescription = "",
+                    tint = Color.Black
+                )
+            }
+
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(40.dp, 30.dp)
+            )
+
+
+            IconButton(
+                onClick = { }) {
+                Image(
+                    painter = painterResource(id = R.drawable.support),
+                    contentDescription = "",
+                    Modifier.size(24.dp)
+
+                )
+            }
+
+        }
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = Color.LightGray.copy(0.6f)
+        )
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }

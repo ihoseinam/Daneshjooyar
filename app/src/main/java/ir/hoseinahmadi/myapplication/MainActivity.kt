@@ -135,14 +135,15 @@ private fun TopBar() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconButton(
-                onClick = { }) {
-                Image(
-                    painter = painterResource(id = R.drawable.dot),
-                    contentDescription = "",
-                    Modifier.size(17.dp)
-                )
-            }
+                IconButton(
+                    onClick = { }) {
+                    Image(
+                        painter = painterResource(id = R.drawable.dot),
+                        contentDescription = "",
+                        Modifier.size(17.dp)
+                    )
+                }
+
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "",
