@@ -100,6 +100,7 @@ fun CourseDetailScreen(
             } else {
                 VideoTrailer(item.introductionVideo, orientation)
             }
+            CourseTabRow(pagerState)
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
