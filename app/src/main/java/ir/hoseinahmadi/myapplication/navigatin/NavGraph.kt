@@ -7,11 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import ir.hoseinahmadi.myapplication.ui.screens.AboutScreen
-import ir.hoseinahmadi.myapplication.ui.screens.CourseDetailScreen
+import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.CourseDetailScreen
 import ir.hoseinahmadi.myapplication.ui.screens.DocumentsScreen
 import ir.hoseinahmadi.myapplication.ui.screens.home.HomeScreen
 import ir.hoseinahmadi.myapplication.ui.screens.SplashScreen
-import ir.hoseinahmadi.myapplication.ui.screens.home.player.PlayerScreen
+import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.player.PlayerScreen
 import ir.hoseinahmadi.myapplication.ui.screens.login.EnterPhoneScreen
 import ir.hoseinahmadi.myapplication.ui.screens.login.VerifyPhoneScreen
 

@@ -1,4 +1,4 @@
-package ir.hoseinahmadi.myapplication.ui.screens.home.player
+package ir.hoseinahmadi.myapplication.ui.screens.courseDetail.player
 
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth

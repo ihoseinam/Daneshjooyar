@@ -19,3 +19,27 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+
+# Preserve Gson related classes and fields
+-keep class com.google.gson.** { *; }
+
+# Preserve Gson TypeToken usage
+-keepclassmembers class com.google.gson.reflect.TypeToken {
+    <fields>;
+    <methods>;
+}
+
+# Preserve Gson annotations
+-keepattributes *Annotation*
+
+# Preserve model classes for Gson
+-keep class com.example.yourpackage.** { *; }
+-keep class com.google.gson.** { *; }
+-keepclassmembers class com.google.gson.reflect.TypeToken {
+    <fields>;
+    <methods>;
+}
+-keep class ir.hoseinahmadi.myapplication.data.model.** { *; }
+

@@ -1,8 +1,6 @@
-package ir.hoseinahmadi.myapplication.ui.screens
+package ir.hoseinahmadi.myapplication.ui.screens.courseDetail
 
 import android.app.Activity
-import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER
-import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
 import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -20,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -28,7 +25,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,9 +32,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,7 +47,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.SecureFlagPolicy
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -67,10 +60,8 @@ import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
 import io.sanghun.compose.video.uri.VideoPlayerMediaItem
 import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
-import ir.hoseinahmadi.myapplication.ui.screens.home.player.StreamerPlayer
 import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
-import ir.hoseinahmadi.myapplication.viewModel.VideoPlayerViewModel
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -193,43 +184,8 @@ fun CourseDetailScreen(
 
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-private fun TrailerVideoImage(image: String, onClick: () -> Unit) {
-    Box(
-        contentAlignment = Alignment.Center, modifier = Modifier
-            .fillMaxWidth()
-            .height(225.dp)
-            .padding(8.dp)
-            .border(1.dp, color = endLinearGradient, shape = RoundedCornerShape(16.dp))
-    ) {
-        GlideImage(
-            model = image,
-            contentDescription = "",
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp)),
-            contentScale = ContentScale.FillBounds
-        )
-        Box(
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(Brush.linearGradient(listOf(startLinearGradient, endLinearGradient)))
-        ) {
-            IconButton(onClick = onClick) {
-                Icon(
-                    imageVector = Icons.Rounded.PlayArrow,
-                    contentDescription = "",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .size(50.dp)
 
-                )
-            }
-        }
 
-    }
-}
 
 @Composable
 private fun TopBar(onClick: () -> Unit) {
