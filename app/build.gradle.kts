@@ -100,10 +100,16 @@ dependencies {
 
     //data store
     implementation(libs.androidx.datastore.preferences)
+    // Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 
-    implementation("io.sanghun:compose-video:1.2.0")
-    implementation("androidx.media3:media3-session:1.4.0")
-    implementation("androidx.media3:media3-exoplayer-dash:1.4.0")
-    implementation("androidx.media3:media3-exoplayer-hls:1.4.0")
+
+    implementation(libs.compose.video)
+    implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.media3.exoplayer.dash)
+    implementation(libs.androidx.media3.exoplayer.hls)
+
 
 }
