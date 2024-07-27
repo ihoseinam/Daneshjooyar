@@ -16,7 +16,7 @@ class CourseViewModel @Inject constructor(
     private val repository: CourseRepository
 ) : ViewModel() {
 
-    fun getCourseItem(id:Int) :Flow<CourseItemDb> = repository.getCourseItem(id)
+    fun getCourseItem(id:Int) :Flow<CourseItemDb?> = repository.getCourseItem(id)
 
 
 

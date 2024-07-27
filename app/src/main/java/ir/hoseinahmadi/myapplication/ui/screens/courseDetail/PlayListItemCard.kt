@@ -57,14 +57,16 @@ fun PlayListItemCard(
     LaunchedEffect(id) {
         launch {
             viewModel.getCourseItem(id).collectLatest { item ->
-                totalDuration.longValue = item.totalDuration
-                watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
+                totalDuration.longValue = item?.totalDuration?:0
+                watchedPercentage =
+                    calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
             }
         }
         launch {
             viewModel.getWatchedRanges(id).collectLatest { ranges ->
                 watchedRanges = ranges.toMutableList()
-                watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
+                watchedPercentage =
+                    calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
             }
         }
 
@@ -76,7 +78,7 @@ fun PlayListItemCard(
             .padding(vertical = 8.dp),
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = if (watchedPercentage.roundToInt()>=100)Color.Green else Color.White
+            containerColor = if (watchedPercentage.roundToInt() >= 100) Color.Green else Color.White
         ),
         elevation = CardDefaults.cardElevation(0.4.dp)
     ) {
@@ -109,10 +111,10 @@ fun PlayListItemCard(
         }
         Text(text = watchedPercentage.toString())
 
-      /*  HorizontalDivider(
-            thickness = 0.5.dp,
-            color = Color.LightGray.copy(0.5f)
-        )*/
+        /*  HorizontalDivider(
+              thickness = 0.5.dp,
+              color = Color.LightGray.copy(0.5f)
+          )*/
     }
 
 }

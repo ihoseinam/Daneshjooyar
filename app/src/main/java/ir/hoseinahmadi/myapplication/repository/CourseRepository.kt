@@ -12,7 +12,7 @@ import javax.inject.Inject
 class CourseRepository @Inject constructor(
     private val dao: CourseDao
 ) {
-    fun getCourseItem(id:Int) :Flow<CourseItemDb> =dao.getCourseItem2(id)
+    fun getCourseItem(id:Int) :Flow<CourseItemDb?> =dao.getCourseItem2(id)
 
 
     fun getWatchedRanges(id: Int): Flow<List<Pair<Long, Long>>> =
