@@ -49,11 +49,13 @@ fun PlayListItemCard(
     image: String,
     title: String,
     onClick: () -> Unit,
+    watchDuration: (watch: Float) -> Unit,
     viewModel: CourseViewModel = hiltViewModel()
 ) {
     var watchedPercentage by remember { mutableFloatStateOf(0f) }
     var watchedRanges by remember { mutableStateOf<MutableList<Pair<Long, Long>>>(mutableListOf()) }
     val totalDuration = remember { mutableLongStateOf(0L) }
+
 
     LaunchedEffect(id) {
         launch {
@@ -70,8 +72,9 @@ fun PlayListItemCard(
                     calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
             }
         }
-
-
+    }
+    LaunchedEffect(watchedPercentage) {
+        watchDuration(watchedPercentage)
     }
 
     Card(
@@ -81,7 +84,7 @@ fun PlayListItemCard(
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding( 8.dp),
+            .padding(8.dp),
         onClick = onClick,
         colors = CardDefaults.cardColors(
             containerColor = if (watchedPercentage.roundToInt() >= 90) Color(0xff9EF4BB) else Color.White
@@ -91,7 +94,7 @@ fun PlayListItemCard(
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding( 12.dp),
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {

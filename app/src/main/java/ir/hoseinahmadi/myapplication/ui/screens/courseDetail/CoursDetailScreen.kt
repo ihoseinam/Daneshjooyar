@@ -27,8 +27,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,6 +58,7 @@ import ir.hoseinahmadi.myapplication.data.model.CourseItem
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
 import ir.hoseinahmadi.myapplication.navigatin.Screen
 import ir.hoseinahmadi.myapplication.utils.Helper
+import kotlin.math.roundToInt
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -77,6 +81,7 @@ fun CourseDetailScreen(
 
     var isPlaying by remember { mutableStateOf(false) }
     val pagerState = rememberPagerState { 2 }
+
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -106,7 +111,6 @@ fun CourseDetailScreen(
                 when (pagState) {
                     0 -> InfoTeacher()
                     else -> VideoList(item.section, item.image, navHostController)
-
                 }
 
             }
@@ -168,9 +172,20 @@ fun VideoTrailer(video: String, orientation: Int) {
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun VideoList(data: List<CourseSection>, image: String, navHostController: NavHostController) {
+fun VideoList(
+    data: List<CourseSection>, image: String, navHostController: NavHostController,
+) {
+    var watchedPercentages by remember { mutableStateOf<Map<Int, Float>>(emptyMap()) }
+
+    val totalWatchedPercentage = watchedPercentages.values.sum()
     LazyColumn {
+        if (totalWatchedPercentage.roundToInt() >= (data.size + 1 * 95)) {
+            stickyHeader {
+                Text(text = "isComplatedddddddd")
+            }
+        }
         itemsIndexed(items = data) { index, item ->
             PlayListItemCard(
                 id = item.id,
@@ -179,6 +194,12 @@ fun VideoList(data: List<CourseSection>, image: String, navHostController: NavHo
                 onClick = {
                     val senData = Gson().toJson(data)
                     navHostController.navigate(Screen.Player.route + "?data=$senData?index=$index")
+                },
+                watchDuration = { newWatchPercentage ->
+                    watchedPercentages = watchedPercentages.toMutableMap().apply {
+                        // Replace the previous percentage with the new one
+                        put(item.id, newWatchPercentage)
+                    }
                 }
             )
         }
