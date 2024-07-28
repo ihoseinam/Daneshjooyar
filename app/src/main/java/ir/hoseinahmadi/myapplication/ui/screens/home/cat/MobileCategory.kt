@@ -27,7 +27,7 @@ fun MobileCategory(navHostController: NavHostController) {
                     title = "دقیقا میشه بگین تو این دوره چی قراره یاد بگیرم؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/What1.mp4",
                 ),
-                    CourseSection(
+                  CourseSection(
                     id = 21,
                     title = "اندروید چیست و چرا برنامه نویسی اندروید را یاد بگیریم؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/S00-Part02-what-is-android.mp4",
@@ -42,9 +42,45 @@ fun MobileCategory(navHostController: NavHostController) {
                     title = "کاتلین یا جاوا؟ چرا زبان کاتلین بهتر است؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/S00-Part05-kotlin-or-java.mp4",
                 ),
+            )
+        ),
+        CourseItem(
+            id = 2,
+            name = " کسب و کار اینترنتی",
+            title = "دوره آموزش کسب و کار اینترنتی \uD83E\uDDD1\u200D\uD83D\uDCBB (رایگان و کاربردی)",
+            image = "https://www.daneshjooyar.com/wp-content/uploads/2024/05/Online-Businesss-511x312.png",
+            introductionVideo = "",
+            section = listOf<CourseSection>(
+                CourseSection(
+                    id = 30,
+                    title = "کسب و کار اینترنتی چیست؟",
+                    videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/free-business/S01-Part01-what-is-business.mp4"
+                ),
+                  CourseSection(
+                    id = 32,
+                    title = "چه چیزهایی را در کسب و کار اینترنتی میتوان فروخت؟",
+                    videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/free-business/S01-Part01-what-is-business.mp4"
+                ),
 
             )
-        )
+        ),
+       /*   CourseItem(
+            id = 2,
+            name = "",
+            title = "",
+            image = "",
+            introductionVideo = "",
+            section = listOf<CourseSection>()
+        ),
+             CourseItem(
+            id = 2,
+            name = "",
+            title = "",
+            image = "",
+            introductionVideo = "",
+            section = listOf<CourseSection>()
+        ),
+        */
     )
     LazyColumn(
         modifier = Modifier.fillMaxSize()

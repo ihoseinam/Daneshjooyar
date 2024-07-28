@@ -1,6 +1,7 @@
 package ir.hoseinahmadi.myapplication.ui.screens.courseDetail
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.player.calculateWatchedPercentage
 import ir.hoseinahmadi.myapplication.viewModel.CourseViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -56,27 +58,16 @@ fun PlayListItemCard(
     var watchedRanges by remember { mutableStateOf<MutableList<Pair<Long, Long>>>(mutableListOf()) }
     val totalDuration = remember { mutableLongStateOf(0L) }
 
-
-    LaunchedEffect(id) {
-        launch {
-            viewModel.getCourseItem(id).collectLatest { item ->
-                totalDuration.longValue = item?.totalDuration ?: 0
-                watchedPercentage =
-                    calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
-            }
-        }
-        launch {
-            viewModel.getWatchedRanges(id).collectLatest { ranges ->
-                watchedRanges = ranges.toMutableList()
-                watchedPercentage =
-                    calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
-            }
-        }
-    }
-    LaunchedEffect(watchedPercentage) {
-        watchDuration(watchedPercentage)
+    LaunchedEffect(true) { // Use id as key to refresh data when it changes
+        val item = viewModel.getCourseItem(id).firstOrNull()
+        totalDuration.longValue = item?.totalDuration ?: 0
+        watchedRanges = viewModel.getWatchedRanges(id).firstOrNull()?.toMutableList() ?: mutableListOf()
+        val watch =calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
+        watchDuration(watch)
+        watchedPercentage = watch
     }
 
+    Log.e("pasi", "recompo")
     Card(
         border = BorderStroke(
             1.dp,

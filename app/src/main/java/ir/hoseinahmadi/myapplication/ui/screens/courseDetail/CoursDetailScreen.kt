@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.SecureFlagPolicy
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
@@ -54,11 +55,14 @@ import io.sanghun.compose.video.cache.VideoPlayerCacheManager
 import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
 import io.sanghun.compose.video.uri.VideoPlayerMediaItem
 import ir.hoseinahmadi.myapplication.R
+import ir.hoseinahmadi.myapplication.data.model.CompletedItem
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
+import ir.hoseinahmadi.myapplication.data.model.CourseItemDb
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
 import ir.hoseinahmadi.myapplication.navigatin.Screen
 import ir.hoseinahmadi.myapplication.ui.component.IsCompletedCourse
 import ir.hoseinahmadi.myapplication.utils.Helper
+import ir.hoseinahmadi.myapplication.viewModel.CompletedViewModel
 import kotlin.math.roundToInt
 
 
@@ -111,7 +115,7 @@ fun CourseDetailScreen(
             ) { pagState ->
                 when (pagState) {
                     0 -> InfoTeacher()
-                    else -> VideoList(item.section, item.image, navHostController, name = item.name)
+                    else -> VideoList(item, navHostController)
                 }
 
             }
@@ -145,17 +149,16 @@ fun VideoTrailer(video: String, orientation: Int) {
             showFullScreenButton = true,
             controllerAutoShow = true,
         ),
-        volume = 0.6f,  // volume 0.0f to 1.0f
-        repeatMode = RepeatMode.NONE,       // or RepeatMode.ALL, RepeatMode.ONE
-        onCurrentTimeChanged = { // long type, current player time (millisec)
+        repeatMode = RepeatMode.NONE,
+        onCurrentTimeChanged = {
             Log.e("CurrentTime", it.toString())
         },
         enablePipWhenBackPressed = false,
         fullScreenSecurePolicy = SecureFlagPolicy.SecureOn, // فعال کردن حالت ایمن
-        playerInstance = { // ExoPlayer instance (Experimental)
+        playerInstance = {
             addAnalyticsListener(
                 object : AnalyticsListener {
-                    // player logger
+
                 }
             )
         },
@@ -175,35 +178,48 @@ fun VideoTrailer(video: String, orientation: Int) {
 
 @Composable
 fun VideoList(
-    data: List<CourseSection>, image: String, navHostController: NavHostController,
-    name: String
+    data: CourseItem,
+    navHostController: NavHostController,
+    viewModel: CompletedViewModel = hiltViewModel()
 ) {
     var watchedPercentages by remember { mutableStateOf<Map<Int, Float>>(emptyMap()) }
-
     val totalWatchedPercentage = watchedPercentages.values.sum()
-    LazyColumn {
-        if (totalWatchedPercentage.roundToInt() >= (data.size + 1 * 95)) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        if (totalWatchedPercentage.roundToInt() >= (data.section.size) * 95) {
             item {
-                IsCompletedCourse(name)
+                IsCompletedCourse(data.name)
             }
         }
-        itemsIndexed(items = data) { index, item ->
+        itemsIndexed(items = data.section) { index, item ->
             PlayListItemCard(
                 id = item.id,
-                image = image,
+                image = data.image,
                 title = "${Helper.byLocate((index + 1).toString())}. ${item.title}",
                 onClick = {
-                    val senData = Gson().toJson(data)
+                    val senData = Gson().toJson(data.section)
                     navHostController.navigate(Screen.Player.route + "?data=$senData?index=$index")
                 },
-                watchDuration = { newWatchPercentage ->
+                watchDuration = {
                     watchedPercentages = watchedPercentages.toMutableMap().apply {
-                        put(item.id, newWatchPercentage)
+                        put(item.id, it)
                     }
                 }
             )
         }
     }
+   LaunchedEffect(watchedPercentages) {
+         if (totalWatchedPercentage.roundToInt() >= ((data.section.size) * 95)) {
+             viewModel.upsertCompletedItem(
+                 CompletedItem(
+                     id = data.id,
+                     image = data.image,
+                     title = data.title
+                 )
+             )
+         }
+     }
 
 }
 

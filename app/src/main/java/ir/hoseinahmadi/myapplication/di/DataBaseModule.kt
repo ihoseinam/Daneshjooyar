@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ir.hoseinahmadi.myapplication.data.db.CompletedDao
 import ir.hoseinahmadi.myapplication.data.db.CourseDao
 import ir.hoseinahmadi.myapplication.data.db.CourseDataBase
 import javax.inject.Singleton
@@ -29,5 +30,9 @@ object DataBaseModule {
     @Provides
     @Singleton
     fun provideCourseDao(dataBase: CourseDataBase):CourseDao = dataBase.CourseDao()
+
+    @Provides
+    @Singleton
+    fun provideCompletedDao(dataBase: CourseDataBase):CompletedDao = dataBase.CompletedDao()
 
 }
