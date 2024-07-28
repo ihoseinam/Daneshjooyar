@@ -1,6 +1,7 @@
 package ir.hoseinahmadi.myapplication.ui.screens.courseDetail
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,7 +58,7 @@ fun PlayListItemCard(
     LaunchedEffect(id) {
         launch {
             viewModel.getCourseItem(id).collectLatest { item ->
-                totalDuration.longValue = item?.totalDuration?:0
+                totalDuration.longValue = item?.totalDuration ?: 0
                 watchedPercentage =
                     calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
             }
@@ -70,22 +71,27 @@ fun PlayListItemCard(
             }
         }
 
+
     }
 
     Card(
+        border = BorderStroke(
+            1.dp,
+            if (watchedPercentage.roundToInt() >= 90) Color(0xff009618) else Color.White
+        ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding( 8.dp),
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = if (watchedPercentage.roundToInt() >= 100) Color.Green else Color.White
+            containerColor = if (watchedPercentage.roundToInt() >= 90) Color(0xff9EF4BB) else Color.White
         ),
         elevation = CardDefaults.cardElevation(0.4.dp)
     ) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 12.dp),
+                .padding( 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -109,12 +115,6 @@ fun PlayListItemCard(
                 color = Color.Black
             )
         }
-        Text(text = watchedPercentage.toString())
-
-        /*  HorizontalDivider(
-              thickness = 0.5.dp,
-              color = Color.LightGray.copy(0.5f)
-          )*/
     }
 
 }

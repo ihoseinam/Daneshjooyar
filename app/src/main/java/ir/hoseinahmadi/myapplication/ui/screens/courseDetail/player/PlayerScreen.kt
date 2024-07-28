@@ -106,6 +106,7 @@ fun PlayerScreen(
         }
     }
 
+
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycle = lifecycleOwner.lifecycle
     val currentStartTimeState = rememberUpdatedState(currentStartTime)
@@ -114,7 +115,7 @@ fun PlayerScreen(
     val currentCourseIdState = rememberUpdatedState(currentCourseId)
     val totalDurationState = rememberUpdatedState(totalDuration)
 
-    DisposableEffect(lifecycle,playerVideoIndex) {
+    DisposableEffect(lifecycle) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_STOP) {
                 currentStartTimeState.value?.let { start ->
@@ -131,6 +132,15 @@ fun PlayerScreen(
         lifecycle.addObserver(observer)
         onDispose {
             lifecycle.removeObserver(observer)
+        }
+    }
+    DisposableEffect(playerVideoIndex) {
+        onDispose {
+            currentStartTime?.let { start ->
+                addWatchedRange(watchedRanges, start, previousTime)
+                currentStartTime = null
+            }
+            viewModel.upsertCourseItem(currentCourseId, watchedRanges, totalDuration.longValue)
         }
     }
 
@@ -161,11 +171,6 @@ fun PlayerScreen(
                         onClick = {
                             if (playerVideoIndex > 0) {
                                 playerVideoIndex--
-                                viewModel.upsertCourseItem(
-                                    currentCourseIdState.value,
-                                    watchedRangesState.value,
-                                    totalDurationState.value.longValue
-                                )
                             }
                         }
                     ) {
@@ -197,11 +202,6 @@ fun PlayerScreen(
                         onClick = {
                             if (playerVideoIndex < item.size - 1) {
                                 playerVideoIndex++
-                                viewModel.upsertCourseItem(
-                                    currentCourseIdState.value,
-                                    watchedRangesState.value,
-                                    totalDurationState.value.longValue
-                                )
                             }
                         }
                     ) {
