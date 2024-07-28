@@ -1,5 +1,6 @@
 package ir.hoseinahmadi.myapplication.ui.screens.courseDetail
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -55,7 +56,7 @@ fun CourseTabRow(pagerState: PagerState) {
                 modifier = Modifier.background(Color.White),
                 selected =selected ,
                 onClick = {
-                    scope.launch { pagerState.animateScrollToPage(index) }
+                    scope.launch { pagerState.animateScrollToPage(index, animationSpec = tween(500)) }
                 },
                 text = {
                     Text(

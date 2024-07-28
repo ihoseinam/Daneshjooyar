@@ -57,6 +57,7 @@ import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
 import ir.hoseinahmadi.myapplication.navigatin.Screen
+import ir.hoseinahmadi.myapplication.ui.component.IsCompletedCourse
 import ir.hoseinahmadi.myapplication.utils.Helper
 import kotlin.math.roundToInt
 
@@ -110,7 +111,7 @@ fun CourseDetailScreen(
             ) { pagState ->
                 when (pagState) {
                     0 -> InfoTeacher()
-                    else -> VideoList(item.section, item.image, navHostController)
+                    else -> VideoList(item.section, item.image, navHostController, name = item.name)
                 }
 
             }
@@ -172,18 +173,18 @@ fun VideoTrailer(video: String, orientation: Int) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun VideoList(
     data: List<CourseSection>, image: String, navHostController: NavHostController,
+    name: String
 ) {
     var watchedPercentages by remember { mutableStateOf<Map<Int, Float>>(emptyMap()) }
 
     val totalWatchedPercentage = watchedPercentages.values.sum()
     LazyColumn {
         if (totalWatchedPercentage.roundToInt() >= (data.size + 1 * 95)) {
-            stickyHeader {
-                Text(text = "isComplatedddddddd")
+            item {
+                IsCompletedCourse(name)
             }
         }
         itemsIndexed(items = data) { index, item ->
@@ -197,7 +198,6 @@ fun VideoList(
                 },
                 watchDuration = { newWatchPercentage ->
                     watchedPercentages = watchedPercentages.toMutableMap().apply {
-                        // Replace the previous percentage with the new one
                         put(item.id, newWatchPercentage)
                     }
                 }

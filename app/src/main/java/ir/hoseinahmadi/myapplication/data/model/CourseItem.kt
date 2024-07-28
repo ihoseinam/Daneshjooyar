@@ -8,6 +8,7 @@ data class CourseSection(
 
 data class CourseItem(
     val id:Int=0,
+    val name:String="",
     val title:String="",
     val image:String="",
     val introductionVideo:String = "",

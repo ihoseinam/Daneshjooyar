@@ -17,6 +17,7 @@ fun MobileCategory(navHostController: NavHostController) {
     val item = listOf<CourseItem>(
         CourseItem(
             id = 1,
+            name = "اندروید",
             title = "جامع ترین دوره آموزش برنامه نویسی اندروید (۱۵۰ ساعت با پشتیبانی ۲۴ ساعته)",
             image = "https://www.daneshjooyar.com/wp-content/uploads/2023/08/android-1-min-1-511x312.jpg",
             introductionVideo = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/Demo-Android.mp4",
