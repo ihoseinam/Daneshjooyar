@@ -18,7 +18,13 @@ val font_bold = FontFamily(
 val font_standard = FontFamily(
     Font(R.font.iranyekan)
 )
+val yekan_bold = FontFamily(
+    Font(R.font.yekanbakh_bold)
+)
 
+val yekan_black = FontFamily(
+    Font(R.font.yekanbakh_bold)
+)
 
 
 val Typography = Typography(
@@ -28,7 +34,7 @@ val Typography = Typography(
         fontSize = 12.sp,
         lineHeight = 25.sp
     ),
-    bodyMedium =TextStyle(
+    bodyMedium = TextStyle(
         fontFamily = font_standard,
         fontWeight = FontWeight.Light,
         fontSize = 14.sp,
