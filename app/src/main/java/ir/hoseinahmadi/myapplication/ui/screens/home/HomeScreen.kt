@@ -16,7 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.HomeCategory
+import ir.hoseinahmadi.myapplication.ui.screens.home.cat.AiCategory
+import ir.hoseinahmadi.myapplication.ui.screens.home.cat.BusinessCategory
+import ir.hoseinahmadi.myapplication.ui.screens.home.cat.GameCategory
 import ir.hoseinahmadi.myapplication.ui.screens.home.cat.MobileCategory
+import ir.hoseinahmadi.myapplication.ui.screens.home.cat.SiteCategory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -61,8 +65,15 @@ fun HomeScreen(navHostController: NavHostController) {
                 .fillMaxSize()
                 .padding(innerPadding),
             state = pagerState
-        ) {
-            MobileCategory(navHostController)
+        ) {page->
+            when(page){
+                0-> SiteCategory(navHostController = navHostController)
+                1-> MobileCategory(navHostController = navHostController)
+                2-> AiCategory(navHostController = navHostController)
+                3-> GameCategory(navHostController = navHostController)
+                4-> BusinessCategory(navHostController = navHostController)
+                else ->MobileCategory(navHostController)
+            }
         }
     }
 }
