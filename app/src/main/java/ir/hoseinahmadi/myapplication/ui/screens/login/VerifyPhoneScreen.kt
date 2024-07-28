@@ -68,10 +68,7 @@ fun VerifyPhoneScreen(
     phone: String,
     datStoreViewModel: DatStoreViewModel = hiltViewModel()
 ) {
-    Text(
-        text = Helper.byLocate(phone),
-        modifier = Modifier.padding(12.dp)
-    )
+
 
     var code by rememberSaveable {
         mutableStateOf("")
@@ -88,7 +85,7 @@ fun VerifyPhoneScreen(
             .padding(horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(70.dp))
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "",
@@ -210,7 +207,7 @@ fun VerifyPhoneScreen(
         TextButton(onClick = { }) {
             Text(
                 text = "ارسال مجدد کد",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0xff3785CD)
             )
@@ -308,6 +305,8 @@ fun OtpChar(
             imeAction = ImeAction.Next
         ),
         colors = TextFieldDefaults.colors(
+            unfocusedLabelColor = Color.DarkGray,
+            errorTextColor = Color(0xffED2E2E),
             focusedContainerColor = Color.White,
             unfocusedContainerColor = Color.White,
             focusedTextColor = Color.Black,

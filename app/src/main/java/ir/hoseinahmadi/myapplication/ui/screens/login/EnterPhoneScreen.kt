@@ -62,7 +62,7 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
             .padding(horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(70.dp))
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "",
@@ -108,6 +108,8 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
             isError = isError,
             textStyle = MaterialTheme.typography.bodyLarge,
             colors = TextFieldDefaults.colors(
+                unfocusedLabelColor = Color.DarkGray,
+                errorTextColor = Color(0xffED2E2E),
                 focusedContainerColor = Color.White,
                 unfocusedContainerColor = Color.White,
                 focusedTextColor = Color.Black,
