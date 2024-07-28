@@ -44,7 +44,9 @@ import ir.hoseinahmadi.myapplication.data.model.BottomNavigationItem
 import ir.hoseinahmadi.myapplication.navigatin.BottomNavigation
 import ir.hoseinahmadi.myapplication.navigatin.NavGraph
 import ir.hoseinahmadi.myapplication.navigatin.Screen
+import ir.hoseinahmadi.myapplication.ui.component.AlertDialogSendMessage
 import ir.hoseinahmadi.myapplication.ui.component.AppConfig
+import ir.hoseinahmadi.myapplication.ui.component.showAlertMessage
 import ir.hoseinahmadi.myapplication.ui.theme.DaneshjooyarTheme
 
 @AndroidEntryPoint
@@ -113,6 +115,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(innerPadding)
                                 .background(Color.White)
                         ) {
+                            AlertDialogSendMessage()
                             NavGraph(navHostController = navHostController)
                         }
                     }
@@ -153,7 +156,9 @@ private fun TopBar() {
 
 
             IconButton(
-                onClick = { }) {
+                onClick = {
+                    showAlertMessage.value =true
+                }) {
                 Image(
                     painter = painterResource(id = R.drawable.support),
                     contentDescription = "",

@@ -61,6 +61,7 @@ import ir.hoseinahmadi.myapplication.data.model.CourseItemDb
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
 import ir.hoseinahmadi.myapplication.navigatin.Screen
 import ir.hoseinahmadi.myapplication.ui.component.IsCompletedCourse
+import ir.hoseinahmadi.myapplication.ui.component.showAlertMessage
 import ir.hoseinahmadi.myapplication.utils.Helper
 import ir.hoseinahmadi.myapplication.viewModel.CompletedViewModel
 import kotlin.math.roundToInt
@@ -255,7 +256,9 @@ fun TopBar(onClick: () -> Unit) {
 
 
             IconButton(
-                onClick = { }) {
+                onClick = {
+                    showAlertMessage.value =true
+                }) {
                 Image(
                     painter = painterResource(id = R.drawable.support),
                     contentDescription = "",

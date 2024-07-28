@@ -119,13 +119,12 @@ fun EmptyItem(onClick: () -> Unit) {
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(60.dp))
         Image(
             painter = painterResource(id = R.drawable.empty),
             contentDescription = "",
         )
         Text(
-            modifier = Modifier.padding(vertical = 4.dp),
             text = "شما هنوز مدرکی ندارید\n" +
                     "چون دوره ای را به پایان نرسانده اید. ",
             style = MaterialTheme.typography.titleLarge,
@@ -139,7 +138,7 @@ fun EmptyItem(onClick: () -> Unit) {
             ),
             shape = RoundedCornerShape(11.dp),
             modifier = Modifier
-                .padding(12.dp)
+                .padding(horizontal = 12.dp, vertical = 22.dp)
                 .fillMaxWidth()
                 .height(50.dp)
                 .clip(RoundedCornerShape(11.dp))
