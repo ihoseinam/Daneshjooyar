@@ -93,7 +93,7 @@ private fun CategoryItem(
             )
             Text(
                 text = item.title,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = if (selected) Color.White else startLinearGradient
             )
