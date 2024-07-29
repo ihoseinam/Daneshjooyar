@@ -85,7 +85,7 @@ fun VerifyPhoneScreen(
             .padding(horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(90.dp))
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "",

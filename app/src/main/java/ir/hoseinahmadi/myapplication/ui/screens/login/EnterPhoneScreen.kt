@@ -62,7 +62,7 @@ fun EnterPhoneScreen(navHostController: NavHostController) {
             .padding(horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(90.dp))
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "",
