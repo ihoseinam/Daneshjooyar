@@ -35,7 +35,6 @@ fun GameCategory(navHostController: NavHostController) {
 
                 )
         ),
-
         CourseItem(
             id = 1,
             name = "اندروید",
@@ -44,22 +43,22 @@ fun GameCategory(navHostController: NavHostController) {
             introductionVideo = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/Demo-Android.mp4",
             section = listOf<CourseSection>(
                 CourseSection(
-                    id = 20,
+                    id = 10,
                     title = "دقیقا میشه بگین تو این دوره چی قراره یاد بگیرم؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/What1.mp4",
                 ),
                 CourseSection(
-                    id = 21,
+                    id = 11,
                     title = "اندروید چیست و چرا برنامه نویسی اندروید را یاد بگیریم؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/S00-Part02-what-is-android.mp4",
                 ),
                 CourseSection(
-                    id = 22,
+                    id = 12,
                     title = "مسیر و نقشه راه برنامه نویسی موبایل (چگونه برنامه نویس موبایل شویم؟)",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/S00-Part03-android-path.mp4",
                 ),
                 CourseSection(
-                    id = 23,
+                    id = 13,
                     title = "کاتلین یا جاوا؟ چرا زبان کاتلین بهتر است؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/S00-Part05-kotlin-or-java.mp4",
                 ),
@@ -70,15 +69,15 @@ fun GameCategory(navHostController: NavHostController) {
             name = " کسب و کار اینترنتی",
             title = "دوره آموزش کسب و کار اینترنتی \uD83E\uDDD1\u200D\uD83D\uDCBB (رایگان و کاربردی)",
             image = "https://www.daneshjooyar.com/wp-content/uploads/2024/05/Online-Businesss-511x312.png",
-            introductionVideo = "",
+            introductionVideo = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/free-business/S01-Part00-intro.mp4",
             section = listOf<CourseSection>(
                 CourseSection(
-                    id = 30,
+                    id = 20,
                     title = "کسب و کار اینترنتی چیست؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/free-business/S01-Part01-what-is-business.mp4"
                 ),
                 CourseSection(
-                    id = 31,
+                    id = 21,
                     title = "چه چیزهایی را در کسب و کار اینترنتی میتوان فروخت؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/free-business/S01-Part02-products.mp4"
                 ),
@@ -90,10 +89,10 @@ fun GameCategory(navHostController: NavHostController) {
             name = "المنتور",
             title = "دوره آموزش المنتور رایگان به همراه ۲ پروژه عملی",
             image = "https://www.daneshjooyar.com/wp-content/uploads/2024/02/elementor-min-511x312.png",
-            introductionVideo = "",
+            introductionVideo = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/elementor-free/intro.mp4",
             section = listOf<CourseSection>(
                 CourseSection(
-                    id = 40,
+                    id = 30,
                     title = "المنتور چیست؟ چرا باید از آن استفاده کنیم؟",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Business/S05-Elementor-free-and-pro/S05-Part01-what-is-elementor.mp4"
                 ),
@@ -108,23 +107,24 @@ fun GameCategory(navHostController: NavHostController) {
             introductionVideo = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/wordpress-advanced/intro.mp4",
             section = listOf<CourseSection>(
                 CourseSection(
-                    id = 50,
+                    id = 40,
                     title = "معرفی دوره آموزش طراحی سایت بدون کدنویسی با وردپرس",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/wordpress-advanced/intro.mp4"
                 ),
                 CourseSection(
-                    id = 51,
+                    id = 41,
                     title = "ویژگی های طراحی سایت بدون کدنویسی با طراحی سایت اختصاصی",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/wordpress-advanced/site-design-code.mp4"
                 ),
                 CourseSection(
-                    id = 52,
+                    id = 42,
                     title = "تاریخچه پیدایش اینترنت",
                     videoUri = "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Business/S02-Concept/S02-Part01-internet-history.mp4"
                 ),
 
                 )
         ),
+
 
 
         )

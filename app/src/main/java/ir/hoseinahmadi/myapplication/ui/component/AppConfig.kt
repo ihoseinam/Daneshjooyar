@@ -10,4 +10,6 @@ fun AppConfig(
     datStoreViewModel: DatStoreViewModel = hiltViewModel()
 ) {
     Constants.CHECK_LOGIN = datStoreViewModel.getIsLogin() ?: false
+    Constants.USER_PIP = datStoreViewModel.getEnablePip() ?: false
+
 }

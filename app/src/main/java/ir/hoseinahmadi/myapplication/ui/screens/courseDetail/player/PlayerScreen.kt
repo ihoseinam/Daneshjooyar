@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -26,6 +27,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,6 +38,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -81,6 +85,7 @@ import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.TopBar
 import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.yekan_bold
+import ir.hoseinahmadi.myapplication.utils.Constants
 import ir.hoseinahmadi.myapplication.utils.Helper
 import ir.hoseinahmadi.myapplication.viewModel.CourseViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -162,6 +167,9 @@ fun PlayerScreen(
         }
     }
 
+    var enablePip by remember {
+        mutableStateOf(Constants.USER_PIP)
+    }
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -281,9 +289,9 @@ fun PlayerScreen(
                 handleLifecycle = true,
                 autoPlay = true,
                 usePlayerController = true,
-                enablePip = true,
+                enablePip = enablePip,
                 handleAudioFocus = true,
-                enablePipWhenBackPressed = true,
+                enablePipWhenBackPressed = enablePip,
                 controllerConfig = VideoPlayerControllerConfig(
                     showSpeedAndPitchOverlay = true,
                     showSubtitleButton = false,
@@ -364,18 +372,29 @@ fun PlayerScreen(
                         }
                     )
             )
-
             if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
                 val sliderWatch by animateFloatAsState(
                     targetValue = watchedPercentage.roundToInt().toFloat(), label = "",
                     animationSpec = tween(800)
                 )
+                var showBottom by remember {
+                    mutableStateOf(false)
+                }
+
+                if (showBottom) {
+                    BottomSheetPip(
+                        enablePip = { enablePip = it }
+                    ) {
+                        showBottom = false
+                    }
+                }
+
                 Text(
                     modifier = Modifier.padding(12.dp),
                     text = stringResource(id = R.string.lorm),
                     color = Color.Black,
                     style = MaterialTheme.typography.bodyMedium
-                    )
+                )
                 Text(
                     modifier = Modifier.padding(top = 9.dp, start = 12.dp),
                     text = "درصد پیشرفت",
@@ -386,7 +405,7 @@ fun PlayerScreen(
                 )
                 Text(
                     modifier = Modifier
-                        .padding(end = 20.dp,)
+                        .padding(end = 20.dp)
                         .align(Alignment.End),
                     text = "${
                         Helper.byLocate(
@@ -408,7 +427,7 @@ fun PlayerScreen(
                     valueRange = 0f..100f,
                     colors = SliderDefaults.colors(
                         disabledActiveTrackColor = endLinearGradient,
-                        disabledInactiveTrackColor = Color.LightGray.copy(0.3f),
+                        disabledInactiveTrackColor = Color.LightGray.copy(0.35f),
                     ),
                     thumb = {
                         Image(
@@ -421,7 +440,35 @@ fun PlayerScreen(
                         )
                     }
                 )
+                TextButton(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = {
+                        showBottom = true
+                    }
+                ) {
+                    Text(
+                        text = "پنجره شناور",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color =if (enablePip)Color(0xFF19961E) else Color(0xFFCD1717)
+                    )
+                    if (enablePip) {
+                        Icon(
+                            imageVector = Icons.Rounded.Check,
+                            contentDescription = "",
+                            tint = Color(0xFF19961E)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = "",
+                            tint = Color(0xFFCD1717)
+                        )
+                    }
+
+                }
             }
+
         }
     }
 }
