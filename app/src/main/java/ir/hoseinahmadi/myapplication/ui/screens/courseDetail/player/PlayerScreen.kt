@@ -2,10 +2,7 @@ package ir.hoseinahmadi.myapplication.ui.screens.courseDetail.player
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER
-import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -18,13 +15,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
@@ -54,7 +49,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -68,8 +62,6 @@ import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.media3.common.Player
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
@@ -90,7 +82,6 @@ import ir.hoseinahmadi.myapplication.utils.Helper
 import ir.hoseinahmadi.myapplication.viewModel.CourseViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MutableCollectionMutableState")
@@ -169,6 +160,9 @@ fun PlayerScreen(
 
     var enablePip by remember {
         mutableStateOf(Constants.USER_PIP)
+    }
+    var showBottom by remember {
+        mutableStateOf(false)
     }
     Scaffold(
         containerColor = Color.White,
@@ -377,9 +371,7 @@ fun PlayerScreen(
                     targetValue = watchedPercentage.roundToInt().toFloat(), label = "",
                     animationSpec = tween(800)
                 )
-                var showBottom by remember {
-                    mutableStateOf(false)
-                }
+
 
                 if (showBottom) {
                     BottomSheetPip(
@@ -405,7 +397,7 @@ fun PlayerScreen(
                 )
                 Text(
                     modifier = Modifier
-                        .padding(end = 8.dp)
+                        .padding(end = 15.dp)
                         .align(Alignment.End),
                     text = "${
                         Helper.byLocate(
