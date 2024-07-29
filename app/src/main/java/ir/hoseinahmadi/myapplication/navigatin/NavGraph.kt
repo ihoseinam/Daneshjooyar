@@ -10,7 +10,7 @@ import ir.hoseinahmadi.myapplication.ui.screens.about.AboutScreen
 import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.CourseDetailScreen
 import ir.hoseinahmadi.myapplication.ui.screens.document.DocumentsScreen
 import ir.hoseinahmadi.myapplication.ui.screens.home.HomeScreen
-import ir.hoseinahmadi.myapplication.ui.screens.SplashScreen
+import ir.hoseinahmadi.myapplication.ui.screens.splash.SplashScreen
 import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.player.PlayerScreen
 import ir.hoseinahmadi.myapplication.ui.screens.login.EnterPhoneScreen
 import ir.hoseinahmadi.myapplication.ui.screens.login.VerifyPhoneScreen

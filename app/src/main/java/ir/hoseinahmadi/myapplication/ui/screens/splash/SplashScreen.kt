@@ -1,11 +1,13 @@
-package ir.hoseinahmadi.myapplication.ui.screens
+package ir.hoseinahmadi.myapplication.ui.screens.splash
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -13,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import ir.hoseinahmadi.myapplication.R
@@ -24,6 +26,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navHostController: NavHostController) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -62,6 +66,9 @@ fun SplashScreen(navHostController: NavHostController) {
         )
 
     }
+
+    BottomSheetNoInternet(true){}
+/*
     LaunchedEffect(key1 = true) {
         delay(2000)
         if (Constants.CHECK_LOGIN){
@@ -79,4 +86,20 @@ fun SplashScreen(navHostController: NavHostController) {
         }
 
     }
+*/
 }
+
+
+fun isOnline(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return when {
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        else -> false
+    }
+}
+
