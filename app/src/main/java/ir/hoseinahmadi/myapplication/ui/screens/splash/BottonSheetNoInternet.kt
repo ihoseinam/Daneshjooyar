@@ -1,5 +1,6 @@
 package ir.hoseinahmadi.myapplication.ui.screens.splash
 
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,6 +36,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.provider.Settings
+import androidx.compose.ui.platform.LocalContext
+
 import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
@@ -46,6 +50,7 @@ fun BottomSheetNoInternet(
     show: Boolean,
     onDismissRequest: () -> Unit
 ) {
+    val context = LocalContext.current
     if (show) {
         ModalBottomSheet(
             shape = RoundedCornerShape(11.dp),
@@ -84,7 +89,6 @@ fun BottomSheetNoInternet(
                     modifier = Modifier.padding(vertical = 8.dp),
                     text = "به اینترنت متصل نیستید. برای استفاده از اپلیکیشن به اینترنت متصل شوید.",
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
                     color = Color.Black
                 )
                 Row(
@@ -100,7 +104,11 @@ fun BottomSheetNoInternet(
                             .width(180.dp)
                             .height(50.dp),
                         shape = RoundedCornerShape(11.dp),
-                        onClick = { }) {
+                        onClick = {
+                            val intent = Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS)
+                            context.startActivity(intent)
+                        }
+                    ) {
                         Text(
                             text = "اینترنت موبایل",
                             style = MaterialTheme.typography.bodyMedium,
@@ -109,7 +117,11 @@ fun BottomSheetNoInternet(
                     }
 
                     Button(
-                        onClick = {},
+                        onClick = {
+                            // Intent to open Wi-Fi settings
+                            val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+                            context.startActivity(intent)
+                        },
                         colors = ButtonDefaults.buttonColors(
                             Color.Transparent,
                         ),
@@ -133,7 +145,6 @@ fun BottomSheetNoInternet(
                             color = Color.White
                         )
                     }
-
                 }
             }
         }
