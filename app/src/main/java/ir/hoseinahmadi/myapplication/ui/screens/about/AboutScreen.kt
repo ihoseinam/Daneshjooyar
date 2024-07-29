@@ -1,5 +1,8 @@
 package ir.hoseinahmadi.myapplication.ui.screens.about
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +32,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -183,6 +187,7 @@ private fun Attributes(
 
 @Composable
 fun SocialMedia() {
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -190,8 +195,25 @@ fun SocialMedia() {
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val instagramPackage = "com.instagram.android"
+        val uri = Uri.parse("http://instagram.com/_u/lrn.ir")
+        val webUri = Uri.parse("http://instagram.com/lrn.ir")
+
+
         Button(
-            onClick = {},
+            onClick = {
+                // Check if Instagram is installed
+                try {
+                    context.packageManager.getPackageInfo(instagramPackage, PackageManager.GET_ACTIVITIES)
+
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    intent.setPackage(instagramPackage)
+                    context.startActivity(intent)
+                } catch (e: PackageManager.NameNotFoundException) {
+                    val webIntent = Intent(Intent.ACTION_VIEW, webUri)
+                    context.startActivity(webIntent)
+                }
+            },
             colors = ButtonDefaults.buttonColors(Color.Transparent),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
@@ -230,8 +252,22 @@ fun SocialMedia() {
                     )
             }
         }
+        val youtubePackage = "com.google.android.youtube"
+        val uri2 = Uri.parse("vnd.youtube://alireza-ahmad")
+        val webUri2 = Uri.parse("https://www.youtube.com/@alireza-ahmadi")
+
         Button(
-            onClick = {},
+            onClick = {
+                try {
+                    context.packageManager.getPackageInfo(youtubePackage, PackageManager.GET_ACTIVITIES)
+                    val intent = Intent(Intent.ACTION_VIEW, uri2)
+                    intent.setPackage(youtubePackage)
+                    context.startActivity(intent)
+                } catch (e: PackageManager.NameNotFoundException) {
+                val webIntent = Intent(Intent.ACTION_VIEW, webUri2)
+                context.startActivity(webIntent)
+            }
+            },
             colors = ButtonDefaults.buttonColors(Color.Transparent),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
