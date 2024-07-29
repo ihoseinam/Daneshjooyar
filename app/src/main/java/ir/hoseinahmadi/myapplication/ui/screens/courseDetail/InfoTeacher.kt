@@ -151,12 +151,12 @@ fun InfoTeacher() {
                 description = "امتیاز دانشجویان"
             )
                  InfoItem(
-                icon = painterResource(id = R.drawable.profile),
+                icon = painterResource(id = R.drawable.dore),
                 title = "۲۶ عدد",
                 description = "تعداد دوره ها"
             )
                  InfoItem(
-                icon = painterResource(id = R.drawable.profile),
+                icon = painterResource(id = R.drawable.clock),
                 title = "۶۹۷ ساعت",
                 description = "ساعت آموزش"
             )
@@ -167,7 +167,7 @@ fun InfoTeacher() {
 }
 
 @Composable
-private fun InfoItem(
+ fun InfoItem(
     icon: Painter,
     title: String,
     description: String

@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import ir.hoseinahmadi.myapplication.ui.screens.AboutScreen
+import ir.hoseinahmadi.myapplication.ui.screens.about.AboutScreen
 import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.CourseDetailScreen
 import ir.hoseinahmadi.myapplication.ui.screens.document.DocumentsScreen
 import ir.hoseinahmadi.myapplication.ui.screens.home.HomeScreen
