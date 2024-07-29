@@ -47,7 +47,6 @@ fun SplashScreen(navHostController: NavHostController) {
    var showRetry by remember {
         mutableStateOf(false)
     }
-
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         if (isOnline(context)) {
@@ -73,20 +72,20 @@ fun SplashScreen(navHostController: NavHostController) {
     ) {
         Image(
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .size(400.dp, 205.dp),
-            painter = painterResource(id = R.drawable.splash_top),
+                .align(Alignment.BottomCenter)
+                .size(428.dp, 220.dp),
+            painter = painterResource(id = R.drawable.bottom_splash),
             contentDescription = "",
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.Crop
         )
 
         Image(
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(400.dp, 205.dp),
-            painter = painterResource(id = R.drawable.splash_bottom),
+                .align(Alignment.TopCenter)
+                .size(428.dp, 214.dp),
+            painter = painterResource(id = R.drawable.top_splash),
             contentDescription = "",
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.Crop
         )
         Image(
             modifier = Modifier

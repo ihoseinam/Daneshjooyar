@@ -405,7 +405,7 @@ fun PlayerScreen(
                 )
                 Text(
                     modifier = Modifier
-                        .padding(end = 20.dp)
+                        .padding(end = 8.dp)
                         .align(Alignment.End),
                     text = "${
                         Helper.byLocate(
@@ -431,11 +431,11 @@ fun PlayerScreen(
                     ),
                     thumb = {
                         Image(
-                            painter = painterResource(id = R.drawable.slider_tumb),
+                            painter = painterResource(id = R.drawable.slidertum),
                             contentDescription = "",
                             modifier = Modifier
                                 .rotate(180f)
-                                .size(45.dp, 53.dp),
+                                .size(45.dp, 50.dp),
                             contentScale = ContentScale.Crop
                         )
                     }

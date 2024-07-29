@@ -191,15 +191,16 @@ fun InfoTeacher() {
             Spacer(modifier = Modifier.height(5.dp))
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    brush = Brush.linearGradient(listOf(startLinearGradient, endLinearGradient))
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    brush = Brush.linearGradient(listOf(startLinearGradient, endLinearGradient)),
+                    fontFamily = yekan_bold
                 ),
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Black,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = description,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.titleMedium,
                 color = Color.Black,
             )
         }

@@ -67,19 +67,19 @@ class MainActivity : ComponentActivity() {
                             route = Screen.Home.route,
                             name = "خانه",
                             selectedIcon = painterResource(id = R.drawable.home),
-                            unSelectedIcon = painterResource(id = R.drawable.home_outline)
+                            unSelectedIcon = painterResource(id = R.drawable.homefiil)
                         ),
                         BottomNavigationItem(
                             route = Screen.About.route,
                             name = "درباره ما",
                             selectedIcon = painterResource(id = R.drawable.about),
-                            unSelectedIcon = painterResource(id = R.drawable.about_outlinr)
+                            unSelectedIcon = painterResource(id = R.drawable.aboutfiil)
                         ),
                         BottomNavigationItem(
                             route = Screen.Documents.route,
                             name = "مدارک",
-                            selectedIcon = painterResource(id = R.drawable.document),
-                            unSelectedIcon = painterResource(id = R.drawable.document_outlin)
+                            selectedIcon = painterResource(id = R.drawable.doc),
+                            unSelectedIcon = painterResource(id = R.drawable.docfiil)
                         ),
 
                         )

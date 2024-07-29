@@ -54,12 +54,12 @@ fun AboutScreen(navHostController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.dan_larglogo),
+            painter = painterResource(id = R.drawable.larglogo),
             contentDescription = "",
             modifier = Modifier
                 .padding(12.dp)
                 .fillMaxWidth()
-                .height(110.dp),
+                .height(125.dp),
         )
         FlowRow(
             maxItemsInEachRow = 2,
@@ -68,12 +68,12 @@ fun AboutScreen(navHostController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             InfoItem(
-                icon = painterResource(id = R.drawable.users),
+                icon = painterResource(id = R.drawable.users2),
                 title = "۴۰۰,۰۰۰+",
                 description = "تعداد کاربران"
             )
             InfoItem(
-                icon = painterResource(id = R.drawable.folowers),
+                icon = painterResource(id = R.drawable.folower),
                 title = "۲۵,۰۰۰+",
                 description = "بازدید روزانه"
             )
@@ -242,7 +242,6 @@ fun SocialMedia() {
                 Image(
                     painter = painterResource(id = R.drawable.insta),
                     contentDescription = "",
-                    Modifier.size(50.dp),
                     contentScale = ContentScale.Crop
                 )
                 Text(text = "اینستاگرام",
@@ -291,7 +290,7 @@ fun SocialMedia() {
                 Image(
                     painter = painterResource(id = R.drawable.yotube),
                     contentDescription = "",
-                    Modifier.size(50.dp),
+                    Modifier.size(40.dp),
                 )
                 Text(text = "یوتیوب",
                     style = MaterialTheme.typography.bodyLarge,
