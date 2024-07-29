@@ -46,6 +46,7 @@ import ir.hoseinahmadi.myapplication.navigatin.NavGraph
 import ir.hoseinahmadi.myapplication.navigatin.Screen
 import ir.hoseinahmadi.myapplication.ui.component.AlertDialogSendMessage
 import ir.hoseinahmadi.myapplication.ui.component.AppConfig
+import ir.hoseinahmadi.myapplication.ui.component.ChangeStatusBarColor
 import ir.hoseinahmadi.myapplication.ui.component.showAlertMessage
 import ir.hoseinahmadi.myapplication.ui.theme.DaneshjooyarTheme
 
@@ -58,6 +59,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppConfig()
             navHostController = rememberNavController()
+            ChangeStatusBarColor(navHostController)
             DaneshjooyarTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     val item = listOf<BottomNavigationItem>(
