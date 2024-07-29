@@ -1,6 +1,7 @@
 package ir.hoseinahmadi.myapplication.ui.component
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -38,10 +39,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.yekan_bold
@@ -91,9 +96,45 @@ fun AlertDialogSendMessage(
                 showAlertMessage.value = false
                 viewModel.resetResponse()
             },
-            confirmButton = { /*TODO*/ },
+            confirmButton = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(11.dp))
+                        .background(
+                            Brush.linearGradient(listOf(startLinearGradient, endLinearGradient))
+                        ),
+                    onClick = {
+                        if (title.isNotEmpty() && body.isNotEmpty()) {
+                            loading = true
+                            checkedInput = false
+                            val message =
+                                "پیام جدید از دانشجویار :\n\nموضوع : $title\n متن پیام : \n $body "
+                            viewModel.senMessage(message)
+                        } else {
+                            checkedInput = true
+                        }
+                    })
+                {
+                    if (loading) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            modifier = Modifier.size(26.dp)
+                        )
+                    } else {
+                        Text(
+                            text = "ارسال",
+                            color = Color.White,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
 
-            title = {
+                }
+            },
+            icon = {
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -105,9 +146,10 @@ fun AlertDialogSendMessage(
 
                         }) {
                         Icon(
-                            imageVector = Icons.Rounded.Close,
+                            painter = painterResource(id = R.drawable.close_circle),
                             contentDescription = "",
-                            tint = Color.Black
+                            tint = Color.Black,
+                            modifier = Modifier.size(25.dp)
                         )
                     }
 
@@ -185,43 +227,6 @@ fun AlertDialogSendMessage(
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         })
-
-                    Button(
-                        colors = ButtonDefaults.buttonColors(Color.Transparent),
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier
-                            .padding(vertical = 12.dp)
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .clip(RoundedCornerShape(11.dp))
-                            .background(
-                                Brush.linearGradient(listOf(startLinearGradient, endLinearGradient))
-                            ),
-                        onClick = {
-                            if (title.isNotEmpty() && body.isNotEmpty()) {
-                                loading = true
-                                checkedInput = false
-                                val message =
-                                    "پیام جدید از دانشجویار :\n\nموضوع : $title\n متن پیام : \n $body "
-                                viewModel.senMessage(message)
-                            } else {
-                                checkedInput = true
-                            }
-                        }) {
-                        if (loading) {
-                            CircularProgressIndicator(
-                                color = Color.White,
-                                modifier = Modifier.size(30.dp)
-                            )
-                        } else {
-                            Text(
-                                text = "ارسال",
-                                color = Color.White,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-
-                    }
 
 
                 }

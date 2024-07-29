@@ -187,6 +187,7 @@ fun VideoList(
     val totalWatchedPercentage = watchedPercentages.values.sum()
     LazyColumn(
         modifier = Modifier.fillMaxSize()
+            .padding(top = 8.dp)
     ) {
         if (totalWatchedPercentage.roundToInt() >= (data.section.size) * 95) {
             item {
@@ -211,6 +212,7 @@ fun VideoList(
         }
     }
    LaunchedEffect(watchedPercentages) {
+       Log.e("pasi","la save")
          if (totalWatchedPercentage.roundToInt() >= ((data.section.size) * 95)) {
              viewModel.upsertCompletedItem(
                  CompletedItem(
@@ -221,6 +223,7 @@ fun VideoList(
              )
          }
      }
+    Log.e("pasi",watchedPercentages.toString())
 
 }
 

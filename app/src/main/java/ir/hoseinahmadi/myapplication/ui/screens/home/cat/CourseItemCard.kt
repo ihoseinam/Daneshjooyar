@@ -1,6 +1,7 @@
 package ir.hoseinahmadi.myapplication.ui.screens.home.cat
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,16 +21,18 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import ir.hoseinahmadi.myapplication.data.model.CourseItem
+import ir.hoseinahmadi.myapplication.ui.theme.yekan_bold
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CourseItemCard(item: CourseItem,onClick :()->Unit) {
     Card(
-        modifier = Modifier.padding(12.dp),
+        modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        elevation = CardDefaults.cardElevation(2.dp),
+        elevation = CardDefaults.cardElevation(1.5.dp),
         onClick = onClick) {
         Column(
             modifier = Modifier.padding(8.dp),
@@ -37,6 +40,7 @@ fun CourseItemCard(item: CourseItem,onClick :()->Unit) {
         ) {
             GlideImage(
                 modifier = Modifier
+                    .padding(4.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .size(330.dp, 190.dp),
                 model = item.image,
@@ -47,7 +51,8 @@ fun CourseItemCard(item: CourseItem,onClick :()->Unit) {
                 modifier = Modifier.padding(10.dp),
                 text = item.title,
                 style = MaterialTheme.typography.bodyLarge.copy(
-                    fontSize = 15.sp
+                    fontSize = 15.sp,
+                    fontFamily = yekan_bold
                 ),
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
