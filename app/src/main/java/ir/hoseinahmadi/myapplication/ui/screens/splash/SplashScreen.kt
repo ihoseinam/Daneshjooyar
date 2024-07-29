@@ -44,12 +44,17 @@ fun SplashScreen(navHostController: NavHostController) {
         mutableStateOf(false)
     }
 
+   var showRetry by remember {
+        mutableStateOf(false)
+    }
+
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         if (isOnline(context)) {
             delay(1000)
             navigateToHome(navHostController)
         } else {
+            showRetry =true
             showDialog = true
         }
 
@@ -90,7 +95,7 @@ fun SplashScreen(navHostController: NavHostController) {
             painter = painterResource(id = R.drawable.logo),
             contentDescription = ""
         )
-        if (!isOnline(context)) {
+        if (showRetry) {
             OutlinedButton(
                 modifier = Modifier
                     .padding(bottom = 30.dp)
