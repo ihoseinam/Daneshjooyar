@@ -164,14 +164,16 @@ fun VideoTrailer(video: String, orientation: Int) {
             )
         },
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clip(RoundedCornerShape(16.dp))
             .then(
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    Modifier.fillMaxHeight()
+                    Modifier.fillMaxSize()
                 } else {
-                    Modifier.height(210.dp)
+                    Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .height(210.dp)
+                        .clip(RoundedCornerShape(16.dp))
+
                 }
             )
     )
@@ -212,7 +214,6 @@ fun VideoList(
         }
     }
    LaunchedEffect(watchedPercentages) {
-       Log.e("pasi","la save")
          if (totalWatchedPercentage.roundToInt() >= ((data.section.size) * 95)) {
              viewModel.upsertCompletedItem(
                  CompletedItem(
@@ -223,7 +224,6 @@ fun VideoList(
              )
          }
      }
-    Log.e("pasi",watchedPercentages.toString())
 
 }
 

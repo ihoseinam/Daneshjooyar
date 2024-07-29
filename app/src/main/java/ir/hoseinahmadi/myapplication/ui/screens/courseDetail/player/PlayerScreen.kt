@@ -5,7 +5,15 @@ import android.app.Activity
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,11 +27,13 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -40,10 +50,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.SecureFlagPolicy
@@ -61,15 +75,19 @@ import io.sanghun.compose.video.VideoPlayer
 import io.sanghun.compose.video.cache.VideoPlayerCacheManager
 import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
 import io.sanghun.compose.video.uri.VideoPlayerMediaItem
+import ir.hoseinahmadi.myapplication.R
 import ir.hoseinahmadi.myapplication.data.model.CourseSection
 import ir.hoseinahmadi.myapplication.ui.screens.courseDetail.TopBar
+import ir.hoseinahmadi.myapplication.ui.theme.endLinearGradient
 import ir.hoseinahmadi.myapplication.ui.theme.startLinearGradient
+import ir.hoseinahmadi.myapplication.ui.theme.yekan_bold
 import ir.hoseinahmadi.myapplication.utils.Helper
 import ir.hoseinahmadi.myapplication.viewModel.CourseViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun PlayerScreen(
@@ -147,12 +165,20 @@ fun PlayerScreen(
     Scaffold(
         containerColor = Color.White,
         topBar = {
-            if (orientation != Configuration.ORIENTATION_LANDSCAPE){
+            AnimatedVisibility(
+                visible = orientation != Configuration.ORIENTATION_LANDSCAPE,
+                enter = fadeIn() + expandVertically(animationSpec = tween(1000)),
+                exit = fadeOut() + shrinkVertically(animationSpec = tween(1000))
+            ) {
                 TopBar { navHostController.navigateUp() }
             }
         },
         bottomBar = {
-            if (orientation != Configuration.ORIENTATION_LANDSCAPE){
+            AnimatedVisibility(
+                visible = orientation != Configuration.ORIENTATION_LANDSCAPE,
+                enter = fadeIn() + expandVertically(animationSpec = tween(1000)),
+                exit = fadeOut() + shrinkVertically(animationSpec = tween(1000))
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -239,9 +265,11 @@ fun PlayerScreen(
                     text = "${Helper.byLocate((playerVideoIndex + 1).toString())}. ${item[playerVideoIndex].title}",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 15.dp, vertical = 12.dp),
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold,
+                        .padding(horizontal = 15.dp, vertical = 8.dp),
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontFamily = yekan_bold
+                    ),
+                    fontWeight = FontWeight.Black,
                 )
             }
 
@@ -253,9 +281,9 @@ fun PlayerScreen(
                 handleLifecycle = true,
                 autoPlay = true,
                 usePlayerController = true,
-                enablePip = false,
+                enablePip = true,
                 handleAudioFocus = true,
-                enablePipWhenBackPressed = false,
+                enablePipWhenBackPressed = true,
                 controllerConfig = VideoPlayerControllerConfig(
                     showSpeedAndPitchOverlay = true,
                     showSubtitleButton = false,
@@ -321,28 +349,79 @@ fun PlayerScreen(
                     })
                 },
                 modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(16.dp))
                     .then(
                         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            Modifier.wrapContentHeight()
+                            Modifier
+                                .fillMaxSize()
+                                .weight(1f)
                         } else {
-                            Modifier.height(210.dp)
+                            Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth()
+                                .height(210.dp)
+                                .clip(RoundedCornerShape(16.dp))
+
                         }
                     )
             )
 
+            if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                val sliderWatch by animateFloatAsState(
+                    targetValue = watchedPercentage.roundToInt().toFloat(), label = "",
+                    animationSpec = tween(800)
+                )
+                Text(
+                    modifier = Modifier.padding(12.dp),
+                    text = stringResource(id = R.string.lorm),
+                    color = Color.Black,
+                    style = MaterialTheme.typography.bodyMedium
+                    )
+                Text(
+                    modifier = Modifier.padding(top = 9.dp, start = 12.dp),
+                    text = "درصد پیشرفت",
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontFamily = yekan_bold
+                    ),
+                    fontWeight = FontWeight.Black,
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(end = 20.dp,)
+                        .align(Alignment.End),
+                    text = "${
+                        Helper.byLocate(
+                            watchedPercentage.roundToInt().toString()
+                        )
+                    }/${Helper.byLocate("100%")}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.Black,
+                    fontWeight = FontWeight.SemiBold
+                )
 
-            Slider(
-                enabled = false,
-                value = watchedPercentage , // Convert percentage to a value between 0 and 1
-                onValueChange = {},
-                valueRange = 0f..100f
-            )
-            Text(text =(watchedPercentage).roundToInt().toString() +"%" )
+                Slider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .rotate(180f),
+                    enabled = false,
+                    value = sliderWatch,
+                    onValueChange = {},
+                    valueRange = 0f..100f,
+                    colors = SliderDefaults.colors(
+                        disabledActiveTrackColor = endLinearGradient,
+                        disabledInactiveTrackColor = Color.LightGray.copy(0.3f),
+                    ),
+                    thumb = {
+                        Image(
+                            painter = painterResource(id = R.drawable.slider_tumb),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .rotate(180f)
+                                .size(45.dp, 53.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                )
+            }
         }
     }
 }
