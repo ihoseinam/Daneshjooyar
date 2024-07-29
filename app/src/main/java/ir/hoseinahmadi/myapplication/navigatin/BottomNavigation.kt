@@ -73,11 +73,9 @@ fun BottomNavigation(
 
 fun NavHostController.navigateSingleTopTo(route: String) =
     this.navigate(route) {
-        popUpTo(
-            this@navigateSingleTopTo.graph.findStartDestination().id
-        ) {
+        popUpTo(Screen.Home.route) {
             saveState = true
-            inclusive =true
+            inclusive = false
         }
         launchSingleTop = true
         restoreState = true

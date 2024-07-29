@@ -54,8 +54,8 @@ fun SplashScreen(navHostController: NavHostController) {
             delay(1000)
             navigateToHome(navHostController)
         } else {
-            showRetry =true
             showDialog = true
+            showRetry =true
         }
 
     }
@@ -148,14 +148,20 @@ fun navigateToHome(navHostController: NavHostController) {
         navHostController.navigate(Screen.Home.route) {
             popUpTo(Screen.Splash.route) {
                 inclusive = true
+                saveState = true
             }
+            restoreState = true
         }
+
     } else {
         navHostController.navigate(Screen.EnterPhone.route) {
             popUpTo(Screen.Splash.route) {
                 inclusive = true
+                saveState = true
             }
+            restoreState = true
         }
+
     }
 }
 

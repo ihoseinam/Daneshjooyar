@@ -289,7 +289,7 @@ fun PlayerScreen(
                 handleLifecycle = true,
                 autoPlay = true,
                 usePlayerController = true,
-                enablePip = enablePip,
+                enablePip = true,
                 handleAudioFocus = true,
                 enablePipWhenBackPressed = enablePip,
                 controllerConfig = VideoPlayerControllerConfig(
