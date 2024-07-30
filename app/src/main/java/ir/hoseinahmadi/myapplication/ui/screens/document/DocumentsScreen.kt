@@ -148,10 +148,12 @@ fun EmptyItem(onClick: () -> Unit) {
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(120.dp))
         Image(
             painter = painterResource(id = R.drawable.empty),
             contentDescription = "",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.size(226.dp, 168.dp)
         )
         Text(
             text = "شما هنوز مدرکی ندارید\n" +

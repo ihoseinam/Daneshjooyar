@@ -24,21 +24,20 @@ fun ChangeStatusBarColor(navHostController: NavHostController) {
     when (navBackStackEntry?.destination?.route) {
         Screen.Splash.route -> {
             SideEffect {
-                systemUiController.setStatusBarColor(color = endLinearGradient)
+                systemUiController.apply {
+                    setStatusBarColor(color = endLinearGradient.copy(0.8f))
+                    setNavigationBarColor(color = startLinearGradient)
+                }
             }
-            systemUiController.setSystemBarsColor(
-                color = startLinearGradient
-            )
 
         }
 
         else -> {
             SideEffect {
-                systemUiController.setStatusBarColor(color = Color.White)
-            }
-            systemUiController.setSystemBarsColor(
-                color = Color.White
-            )
+                systemUiController.apply {
+                    setStatusBarColor(color = Color.White)
+                    setNavigationBarColor(color = Color.White)
+                }            }
         }
     }
 
