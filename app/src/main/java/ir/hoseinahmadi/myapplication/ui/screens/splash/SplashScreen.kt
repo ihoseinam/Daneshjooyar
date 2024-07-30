@@ -57,8 +57,8 @@ fun SplashScreen(navHostController: NavHostController) {
             showDialog = true
             showRetry =true
         }
-
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
