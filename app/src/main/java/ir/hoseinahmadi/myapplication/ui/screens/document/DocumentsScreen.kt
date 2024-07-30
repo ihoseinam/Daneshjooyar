@@ -69,7 +69,9 @@ fun DocumentsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
+                .padding(top = 8.dp)
         ) {
+           item { Spacer(modifier = Modifier.height(8.dp)) }
             items(item) { course ->
                 CompletedItem(course)
             }
@@ -87,7 +89,7 @@ fun CompletedItem(data: CompletedItem) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(horizontal = 20.dp, vertical = 12.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(Brush.linearGradient(listOf(startLinearGradient, endLinearGradient))),
             horizontalArrangement = Arrangement.Center,
@@ -118,6 +120,7 @@ fun CompletedItem(data: CompletedItem) {
 
         }
         Box(  modifier = Modifier
+            .offset(y = (-8).dp)
             .rotate(-8f)
             .align(Alignment.TopStart)
             .size(80.dp, 100.dp)){
@@ -125,7 +128,9 @@ fun CompletedItem(data: CompletedItem) {
                 contentDescription ="",
                 contentScale = ContentScale.FillBounds,)
             Text(
-                modifier = Modifier.rotate(14f).padding(top = 18.dp, start = 19.dp),
+                modifier = Modifier
+                    .rotate(14f)
+                    .padding(top = 18.dp, start = 19.dp),
                 text = "اتمام\n دوره",
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontFamily = yekan_bold,

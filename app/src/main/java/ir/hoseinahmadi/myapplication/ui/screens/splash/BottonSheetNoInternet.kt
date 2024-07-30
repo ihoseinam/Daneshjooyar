@@ -98,8 +98,7 @@ fun BottomSheetNoInternet(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    OutlinedButton(
-                        border = BorderStroke(1.dp, Color.Black),
+                    TextButton(
                         modifier = Modifier
                             .width(180.dp)
                             .height(50.dp),
