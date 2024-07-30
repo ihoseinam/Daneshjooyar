@@ -2,9 +2,11 @@ package ir.hoseinahmadi.myapplication.ui.screens.courseDetail.player
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -30,7 +32,7 @@ import ir.hoseinahmadi.myapplication.viewModel.DatStoreViewModel
 @Composable
 fun BottomSheetPip(
     datStoreViewModel: DatStoreViewModel = hiltViewModel(),
-    enablePip:(Boolean)->Unit,
+    enablePip: (Boolean) -> Unit,
     onDismissRequest: () -> Unit
 ) {
     var enable by remember {
@@ -49,12 +51,25 @@ fun BottomSheetPip(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "فعال کردن پنجره شناور",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "پنجره شناور",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = "( دکمه بازگشت )",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
+
+            }
+
             Switch(
                 colors = SwitchDefaults.colors(
                     checkedTrackColor = endLinearGradient,
