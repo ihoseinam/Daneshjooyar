@@ -192,7 +192,11 @@ fun VerifyPhoneScreen(
                     isError = true
                 } else {
                     isError = false
-                    navHostController.navigate(Screen.Home.route)
+                    navHostController.navigate(Screen.Home.route){
+                        popUpTo(0){
+                            inclusive =true
+                        }
+                    }
                     Constants.CHECK_LOGIN = true
                     datStoreViewModel.saveIsLogin(true)
                 }

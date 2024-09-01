@@ -188,15 +188,13 @@ fun PlayerScreen(
                         .padding(vertical = 5.dp, horizontal = 2.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    val enableBackButton = playerVideoIndex > 0
-                    val enableForwardButton = playerVideoIndex < item.size - 1
                     OutlinedButton(
                         border = BorderStroke(
                             1.dp,
-                            color = if (enableBackButton) startLinearGradient else Color.LightGray
+                            color = if ( playerVideoIndex > 0) startLinearGradient else Color.LightGray
                         ),
                         shape = RoundedCornerShape(8.dp),
-                        enabled = enableBackButton,
+                        enabled =  playerVideoIndex > 0,
                         onClick = {
                             if (playerVideoIndex > 0) {
                                 playerVideoIndex--
@@ -212,11 +210,11 @@ fun PlayerScreen(
                                 imageVector = Icons.Rounded.PlayArrow,
                                 contentDescription = "",
                                 modifier = Modifier.size(17.dp),
-                                tint = if (enableBackButton) startLinearGradient else Color.LightGray
+                                tint = if ( playerVideoIndex > 0) startLinearGradient else Color.LightGray
                             )
                             Text(
                                 text = "قسمت قبلی",
-                                color = if (enableBackButton) startLinearGradient else Color.LightGray,
+                                color = if ( playerVideoIndex > 0) startLinearGradient else Color.LightGray,
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -224,10 +222,10 @@ fun PlayerScreen(
                     OutlinedButton(
                         border = BorderStroke(
                             1.dp,
-                            color = if (enableForwardButton) startLinearGradient else Color.LightGray
+                            color = if (playerVideoIndex < item.size - 1) startLinearGradient else Color.LightGray
                         ),
                         shape = RoundedCornerShape(8.dp),
-                        enabled = enableForwardButton,
+                        enabled = playerVideoIndex < item.size - 1,
                         onClick = {
                             if (playerVideoIndex < item.size - 1) {
                                 playerVideoIndex++
@@ -241,7 +239,7 @@ fun PlayerScreen(
                         ) {
                             Text(
                                 text = "قسمت بعدی",
-                                color = if (enableForwardButton) startLinearGradient else Color.LightGray,
+                                color = if (playerVideoIndex < item.size - 1) startLinearGradient else Color.LightGray,
                                 style = MaterialTheme.typography.bodyLarge
                             )
                             Icon(
@@ -250,7 +248,7 @@ fun PlayerScreen(
                                 modifier = Modifier
                                     .rotate(180f)
                                     .size(17.dp),
-                                tint = if (enableForwardButton) startLinearGradient else Color.LightGray
+                                tint = if (playerVideoIndex < item.size - 1) startLinearGradient else Color.LightGray
                             )
                         }
                     }
@@ -278,9 +276,7 @@ fun PlayerScreen(
 
             // Video player setup
             VideoPlayer(
-                mediaItems = listOf<VideoPlayerMediaItem>(
-                    VideoPlayerMediaItem.NetworkMediaItem(urlPlayer)
-                ),
+                mediaItems = listOf<VideoPlayerMediaItem>(VideoPlayerMediaItem.NetworkMediaItem(urlPlayer)),
                 handleLifecycle = true,
                 autoPlay = true,
                 usePlayerController = true,
@@ -304,27 +300,37 @@ fun PlayerScreen(
                 repeatMode = RepeatMode.NONE,
                 onCurrentTimeChanged = { currentTime ->
                     if (isPlaying) {
-                        if (currentStartTime == null) {
-                            currentStartTime = currentTime
-                        }
+                        // تبدیل currentTime به Long به صورت ایمن
+                        val currentTimeLong = currentTime.toLong() ?: 0L
 
-                        if (currentTime < previousTime) {
-                            currentStartTime?.let { start ->
-                                addWatchedRange(watchedRanges, start, previousTime)
-                            }
-                            currentStartTime = null
+                        // فقط زمان شروع را در صورتی که تنظیم نشده باشد، به‌روزرسانی کن
+                        if (currentStartTime == null) {
+                            currentStartTime = currentTimeLong
                         } else {
                             val threshold = 1000L
-                            if (currentTime - (currentStartTime ?: 0) > threshold) {
+
+                            if (currentTimeLong < previousTime) {
+                                // مدیریت عقب‌رفت
                                 currentStartTime?.let { start ->
-                                    addWatchedRange(watchedRanges, start, currentTime)
-                                    currentStartTime = currentTime
+                                    addWatchedRange(watchedRanges, start, previousTime)
                                 }
+                                // تنظیم زمان شروع جدید
+                                currentStartTime = currentTimeLong
+                            } else if (currentTimeLong - (currentStartTime ?: 0) > threshold) {
+                                // مدیریت جلو رفت
+                                currentStartTime?.let { start ->
+                                    addWatchedRange(watchedRanges, start, currentTimeLong)
+                                }
+                                // تنظیم زمان شروع جدید
+                                currentStartTime = currentTimeLong
                             }
                         }
-                        previousTime = currentTime
-                        watchedPercentage =
-                            calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
+
+                        // به‌روزرسانی زمان قبلی
+                        previousTime = currentTimeLong
+
+                        // محاسبه درصد مشاهده شده
+                        watchedPercentage = calculateWatchedPercentage(watchedRanges, totalDuration.longValue)
                     }
                 },
                 fullScreenSecurePolicy = SecureFlagPolicy.SecureOn,
@@ -363,16 +369,16 @@ fun PlayerScreen(
                                 .fillMaxWidth()
                                 .height(210.dp)
                                 .clip(RoundedCornerShape(16.dp))
-
                         }
                     )
             )
             if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                val validWatchedPercentage = watchedPercentage.takeIf { !it.isNaN() } ?: 0f
                 val sliderWatch by animateFloatAsState(
-                    targetValue = watchedPercentage.roundToInt().toFloat(), label = "",
+                    targetValue = validWatchedPercentage.roundToInt().toFloat(),
+                    label = "",
                     animationSpec = tween(800)
                 )
-
 
                 if (showBottom) {
                     BottomSheetPip(
@@ -404,7 +410,7 @@ fun PlayerScreen(
                         .align(Alignment.End),
                     text = "${
                         Helper.byLocate(
-                            watchedPercentage.roundToInt().toString()
+                            validWatchedPercentage.roundToInt().toString()
                         )
                     }/${Helper.byLocate("100%")}",
                     style = MaterialTheme.typography.bodyLarge,
@@ -471,33 +477,32 @@ fun PlayerScreen(
 
 fun addWatchedRange(ranges: MutableList<Pair<Long, Long>>, start: Long, end: Long) {
     if (start >= end) return
+    val newRange = start to end
+    val overlappingRanges = mutableListOf<Pair<Long, Long>>()
 
-    var newRange = start to end
-    val updatedRanges = mutableListOf<Pair<Long, Long>>()
-
-    var inserted = false
+    // Find all overlapping ranges
     for (range in ranges) {
-        if (newRange.second < range.first) {
-            if (!inserted) {
-                updatedRanges.add(newRange)
-                inserted = true
-            }
-            updatedRanges.add(range)
-        } else if (newRange.first > range.second) {
-            updatedRanges.add(range)
-        } else {
-            newRange =
-                minOf(newRange.first, range.first) to maxOf(newRange.second, range.second)
+        if (newRange.first <= range.second && newRange.second >= range.first) {
+            overlappingRanges.add(range)
         }
     }
 
-    if (!inserted) {
-        updatedRanges.add(newRange)
-    }
+    // Remove all overlapping ranges
+    ranges.removeAll(overlappingRanges)
 
-    ranges.clear()
-    ranges.addAll(updatedRanges)
+    // Add the merged range
+    val mergedStart =
+        minOf(newRange.first, overlappingRanges.minOfOrNull { it.first } ?: newRange.first)
+    val mergedEnd =
+        maxOf(newRange.second, overlappingRanges.maxOfOrNull { it.second } ?: newRange.second)
+
+    ranges.add(mergedStart to mergedEnd)
+
+    // Sort ranges for consistency (not strictly necessary but can help debug)
+    ranges.sortBy { it.first }
 }
+
+
 
 fun calculateWatchedPercentage(ranges: List<Pair<Long, Long>>, totalDuration: Long): Float {
     if (totalDuration <= 0) return 0f

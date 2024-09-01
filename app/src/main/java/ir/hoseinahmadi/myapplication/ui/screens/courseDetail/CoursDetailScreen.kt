@@ -191,7 +191,7 @@ fun VideoList(
         modifier = Modifier.fillMaxSize()
             .padding(top = 8.dp)
     ) {
-        if (totalWatchedPercentage.roundToInt() >= (data.section.size) * 95) {
+        if (totalWatchedPercentage.roundToInt() >= (data.section.size) * 90) {
             item {
                 IsCompletedCourse(data.name)
             }
